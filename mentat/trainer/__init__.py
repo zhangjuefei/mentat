@@ -1,0 +1,1 @@
+from .trivial import TrivialTrainer
