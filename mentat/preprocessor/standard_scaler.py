@@ -1,6 +1,7 @@
 from .base import Preprocessor
 from ..exception import ParameterException
 import copy
+import numpy as np
 
 
 class StandardScaler(Preprocessor):
@@ -13,8 +14,8 @@ class StandardScaler(Preprocessor):
     def fit(self, data, columns=None):
 
         if columns is None:
-            self.mean = data.data[data.feature_cols].select_dtypes(exclude="object").mean()
-            self.std = data.data[data.feature_cols].select_dtypes(exclude="object").std()
+            self.mean = data.data[data.feature_cols].select_dtypes(exclude=["object"]).mean()
+            self.std = data.data[data.feature_cols].select_dtypes(exclude=["object"]).std()
         else:
 
             if (data.data.dtypes[columns] == "object").any():
