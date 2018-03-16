@@ -32,7 +32,7 @@ wheels/
 *.spec
 
 # Installer logs
-pip-log.txt
+pip-log.txtid
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
@@ -99,3 +99,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# pycharm
+.idea
