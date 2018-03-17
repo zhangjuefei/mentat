@@ -104,3 +104,6 @@ ENV/
 .idea
 *.pyc
 *__pycache__/
+
+# pic
+*.png

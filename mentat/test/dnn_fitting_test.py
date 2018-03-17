@@ -9,12 +9,12 @@ np.random.seed(42)
 hidden_layer_size = [3, 5, 8]  # 隐藏层神经元个数（所有隐藏层都取同样数量神经元）
 hidden_layers = 1  # 隐藏层数量
 hidden_layer_activation_func = "sigmoid"  # 隐藏层激活函数
-learning_rate = 0.4  # 学习率
-max_epochs = 200  # 训练 epoch 数量
-regularization_strength = 0.0001  # 正则化强度
+learning_rate = 0.6  # 学习率
+max_epochs = 300  # 训练 epoch 数量
+regularization_strength = 0  # 正则化强度
 minibatch_size = 40  # mini batch 样本数
-momentum = 0.6  # 冲量惯性
-decay_power = 0.2  # 学习率衰减指数
+momentum = 0.7  # 冲量惯性
+decay_power = 0.3  # 学习率衰减指数
 
 
 def f1(x):
@@ -77,7 +77,7 @@ for cnt, f in enumerate(funcs):
         print("model: {:s} training.".format(name))
 
         ax = plt.subplot(len(funcs), len(classifiers) + 1, i)
-        clf.fit(X, z)
+        clf.train(X, z)
         predict = clf.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
 
         ax = figure.add_subplot(len(funcs), len(classifiers) + 1, i, projection="3d")
