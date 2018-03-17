@@ -1,4 +1,4 @@
-mentat
+MENTAT
 ==
 A machine learning library build on python, pandas and numpy
 </br>
