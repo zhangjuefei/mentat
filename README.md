@@ -21,9 +21,20 @@ data.impute()
 train, test = data.split(0.6)
 
 # deep neural network
-dnn = DNN(input_shape=len(data.feature_cols), shape=[20, len(data.category)], activations=["sigmoid", "identity"],
-          eta=1.0, threshold=1e-5, softmax=True, max_epochs=50, regularization=0.0001, minibatch_size=10, momentum=0.9,
-          decay_power=0.2, verbose=True)
+dnn = DNN(
+    input_shape=len(data.feature_cols),
+    shape=[20, len(data.category)],
+    activations=["sigmoid", "identity"],
+    eta=1.0,
+    threshold=1e-5,
+    softmax=True,
+    max_epochs=50,
+    regularization=0.0001,
+    minibatch_size=10,
+    momentum=0.9,
+    decay_power=0.2,
+    verbose=True
+)
 
 # pipeline
 pipeline = Pipeline(
