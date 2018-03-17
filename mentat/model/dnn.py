@@ -67,8 +67,12 @@ class DNN(Model):
         self.outputs[self.depth] = result
         return self.softmax(result) if self.is_softmax else result
 
-    def predict(self, x):
-        return self.compute(np.mat(x).T).T.A
+    def predict(self, features):
+
+        if features.shape[0] == 0 or features.shape[1] == 0:
+            raise ParameterException("data is empty.")
+
+        return self.compute(np.mat(features).T).T.A
 
     def bp(self, d):
         tmp = d.T
@@ -95,6 +99,11 @@ class DNN(Model):
             self.biases[idx] = self.biases[idx] + self.acc_biases_delta[idx]
 
     def train(self, features, response):
+
+        if features.shape[0] == 0 or features.shape[1] == 0 or features.shape[0] != response.shape[0] or response.shape[
+            1] == 0:
+            raise ParameterException("features or response is empty or number of instances is not equal")
+
         x = np.mat(features)
         y = np.mat(response)
         loss = []
