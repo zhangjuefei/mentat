@@ -14,8 +14,7 @@ import pandas as pd
 
 # load and construct the data frame
 bird = pd.read_csv("../data/bird.csv")
-data = ZDataFrame(bird, response_column="type", ignores=["id"], response_encode="multiclass")
-data.impute()
+data = ZDataFrame(bird, response_column="type", ignores=["id"], response_encode="multiclass").impute("mean")
 
 # keep a test set out
 train, test = data.split(0.6)
