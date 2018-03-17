@@ -3,10 +3,8 @@ mentat
 A machine learning library build on python, pandas and numpy
 </br>
 
-
-example: (mentat/test/pipeline_test.py)
-
 ```python
+# mentat/test/pipeline_test.py
 from mentat import ZDataFrame
 from mentat.preprocessor import StandardScaler
 from mentat.model import DNN
