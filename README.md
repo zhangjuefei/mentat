@@ -1,7 +1,7 @@
 mentat
 ==
 A machine learning library build on python, pandas and numpy
---
+</br>
 
 
 example: (mentat/test/pipeline_test.py)
