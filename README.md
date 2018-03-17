@@ -1,9 +1,12 @@
-# mentat
-A machine learning library build on python, pandas and numpy.
+mentat
+==
+A machine learning library build on python, pandas and numpy
+--
 
 
 example: (mentat/test/pipeline_test.py)
 
+```python
 from mentat import ZDataFrame
 from mentat.preprocessor import StandardScaler
 from mentat.model import DNN
@@ -41,3 +44,4 @@ result = pipeline.evaluate(test)
 # accuracy score (evaluation module is not finished)
 accuracy = (result.data["predict_category"] == result.data["type"]).astype("int").sum() / len(result.data)
 print("accuracy: {:.3f}".format(accuracy))
+```
