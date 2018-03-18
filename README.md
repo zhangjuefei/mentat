@@ -49,7 +49,7 @@ pipeline.fit(train)
 # predict
 result = pipeline.evaluate(test)
 
-# confusion matrix
+# confusion matrix and accuracy
 eva = ClassificationEvaluator()
 eva.fit(result)
 print(eva.confusion_matrix())
