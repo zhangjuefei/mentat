@@ -23,3 +23,8 @@ class ClassificationEvaluator(Evaluator):
         cm["total"] = cm.sum(axis=1)
         cm.columns.name = "true/predict"
         return pd.concat([cm, cm.sum(axis=0).to_frame("total").transpose()], axis=0)
+
+    def accuracy(self):
+        response_column = self.prediction.response_column
+        return (self.prediction.data[response_column] == self.prediction.data["predict_category"]).astype("int").sum() / \
+               self.prediction.shape()[0]
