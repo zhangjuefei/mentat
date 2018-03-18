@@ -53,4 +53,5 @@ result = pipeline.evaluate(test)
 eva = ClassificationEvaluator()
 eva.fit(result)
 print(eva.confusion_matrix())
+print("accuracy: {:.3f}".format(eva.accuracy()))
 ```
