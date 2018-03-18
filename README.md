@@ -4,12 +4,12 @@ A machine learning library build on python, pandas and numpy
 </br>
 
 ```python
-# mentat/test/pipeline_test.py
 from mentat import ZDataFrame
 from mentat.preprocessor import StandardScaler
 from mentat.model import DNN
 from mentat.trainer import TrivialTrainer
 from mentat.pipeline import Pipeline
+from mentat.evaluator import ClassificationEvaluator
 import pandas as pd
 
 # load and construct the data frame
@@ -27,7 +27,7 @@ dnn = DNN(
     eta=1.0,
     threshold=1e-5,
     softmax=True,
-    max_epochs=50,
+    max_epochs=20,
     regularization=0.0001,
     minibatch_size=10,
     momentum=0.9,
@@ -49,7 +49,8 @@ pipeline.fit(train)
 # predict
 result = pipeline.evaluate(test)
 
-# accuracy score (evaluation module is not finished)
-accuracy = (result.data["predict_category"] == result.data["type"]).astype("int").sum() / len(result.data)
-print("accuracy: {:.3f}".format(accuracy))
+# confusion matrix
+eva = ClassificationEvaluator()
+eva.fit(result)
+print(eva.confusion_matrix())
 ```
