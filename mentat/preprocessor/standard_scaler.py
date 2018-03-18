@@ -1,7 +1,7 @@
+import copy
+
 from .base import Preprocessor
 from ..exception import ParameterException
-import copy
-import numpy as np
 
 
 class StandardScaler(Preprocessor):
