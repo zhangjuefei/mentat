@@ -16,18 +16,15 @@ import pandas as pd
 bird = pd.read_csv("../data/bird.csv")
 data = ZDataFrame(bird, response_column="type", ignores=["id"], response_encode="multiclass").impute("mean")
 
-# keep a test set out
-train, test = data.split(0.6)
-
 # deep neural network
 dnn = DNN(
     input_shape=len(data.feature_cols),
-    shape=[20, len(data.category)],
-    activations=["sigmoid", "identity"],
-    eta=1.0,
+    shape=[10, 10, len(data.category)],
+    activations=["sigmoid", "sigmoid", "identity"],
+    eta=1.5,
     threshold=1e-5,
     softmax=True,
-    max_epochs=20,
+    max_epochs=50,
     regularization=0.0001,
     minibatch_size=10,
     momentum=0.9,
@@ -39,19 +36,20 @@ dnn = DNN(
 pipeline = Pipeline(
     {
         "preprocessor": StandardScaler(),  # preprocessor: standard scaler
-        "trainer": TrivialTrainer(dnn, train_fraction=0.7)  # trivial trainer
+        "trainer": TrivialTrainer(dnn, train_fraction=0.7, evaluator=ClassificationEvaluator()),  # trivial trainer
     }
 )
 
 # train
-pipeline.fit(train)
+pipeline.fit(data)
 
 # predict
-result = pipeline.evaluate(test)
+predict_result = pipeline.evaluate(data)
 
-# confusion matrix and accuracy
-eva = ClassificationEvaluator()
-eva.fit(result)
+# classification evaluations
+eva = pipeline.get_operator("trainer").get_evaluator()
+print("\n---------- Confusion Matrix ----------")
 print(eva.confusion_matrix())
-print("accuracy: {:.3f}".format(eva.accuracy()))
+print("\n------- Classification Report --------")
+print(eva.report())
 ```
