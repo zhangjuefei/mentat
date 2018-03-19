@@ -35,8 +35,10 @@ dnn = DNN(
 # pipeline
 pipeline = Pipeline(
     {
-        "preprocessor": StandardScaler(),  # preprocessor: standard scaler
-        "trainer": TrivialTrainer(dnn, train_fraction=0.7, evaluator=ClassificationEvaluator()),  # trivial trainer
+        # preprocessor: standard scaler
+        "preprocessor": StandardScaler(),
+        # trivial trainer (train and test)
+        "trainer": TrivialTrainer(dnn, train_fraction=0.7, evaluator=ClassificationEvaluator()),
     }
 )
 
