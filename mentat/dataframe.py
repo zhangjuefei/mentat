@@ -116,3 +116,6 @@ class ZDataFrame:
             return np.array([self.category[i] for i in np.argmax(response_encoded, axis=1)])
         else:
             return response_encoded
+
+    def __call__(self):
+        return self.data
