@@ -1,4 +1,5 @@
 from .base import Evaluator
+from ..exception import ParameterException
 
 import pandas as pd
 
@@ -16,8 +17,16 @@ class ClassificationEvaluator(Evaluator):
         self.cm = self.prediction.data.groupby([response_column, "predict_category"])[response_column].count().unstack(
             "predict_category", fill_value=0).astype("int")
 
+        return self
+
     def evaluate(self, data):
         return None
+
+    def get_metric(self, metric):
+        if metric == "accuracy":
+            return self.accuracy()
+        else:
+            raise ParameterException("metric {:s} unsupported.".format(metric))
 
     def confusion_matrix(self):
         cm = self.cm.copy()

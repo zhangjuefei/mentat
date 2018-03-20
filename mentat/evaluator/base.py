@@ -13,3 +13,7 @@ class Evaluator(Operator):
     @abc.abstractmethod
     def evaluate(self, data):
         pass
+
+    @abc.abstractmethod
+    def get_metric(self, metric):
+        pass

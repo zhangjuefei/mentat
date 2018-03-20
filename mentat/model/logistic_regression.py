@@ -51,9 +51,9 @@ class LogisticRegression(Model):
 
             if self.method == "IRLS":
                 z = minibatch_x * self.beta + w.I * (minibatch_y - p)
-                self.beta = (minibatch_x.T * w * minibatch_x + 1e-15 * I).I * minibatch_x.T * w * z
+                self.beta = (minibatch_x.T * w * minibatch_x + 1e-10 * I).I * minibatch_x.T * w * z
             elif self.method == "Newton":
-                self.beta = self.beta + effective_eta * (minibatch_x.T * w * minibatch_x + 1e-15 * I).I * minibatch_x.T * (minibatch_y - p)
+                self.beta = self.beta + effective_eta * (minibatch_x.T * w * minibatch_x + 1e-10 * I).I * minibatch_x.T * (minibatch_y - p)
             elif self.method == "Gradient":
                 accu_gradient = accu_gradient * self.momentum + effective_eta * (
                         -minibatch_x.T * (minibatch_y - p) + self.regularization * self.beta)

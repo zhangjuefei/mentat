@@ -3,7 +3,7 @@ from .base import Trainer
 
 class TrivialTrainer(Trainer):
     def __init__(self, model, train_fraction=0.75, evaluator=None):
-        Trainer.__init__(self, model)
+        Trainer.__init__(self)
         self.train_fraction = train_fraction
         self.best_model = model
         self.evaluator = evaluator
