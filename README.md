@@ -23,17 +23,17 @@ train_and_test, to_be_predicted = data.split(.7)
 # construct 3 models(DNN) with dirfferent hyperparameters(size of hidden layer and max epochs here)
 dnns = {
     "dnn_1": DNN(input_shape=len(data.feature_cols), shape=[2, len(data.category)],
-                 activations=["sigmoid", "identity"], eta=.5, softmax=True, max_epochs=2,
+                 activations=["relu", "identity"], eta=.5, softmax=True, max_epochs=2,
                  regularization=0,
                  minibatch_size=20, momentum=.9, decay_power=.2, verbose=True
                  ),
-    "dnn_2": DNN(input_shape=len(data.feature_cols), shape=[10, len(data.category)],
-                 activations=["sigmoid", "identity"], eta=.5, softmax=True, max_epochs=20,
+    "dnn_2": DNN(input_shape=len(data.feature_cols), shape=[20, len(data.category)],
+                 activations=["relu", "identity"], eta=.5, softmax=True, max_epochs=20,
                  regularization=0,
                  minibatch_size=20, momentum=.9, decay_power=.2, verbose=True
                  ),
-    "dnn_3": DNN(input_shape=len(data.feature_cols), shape=[100, len(data.category)],
-                 activations=["sigmoid", "identity"], eta=.5, softmax=True, max_epochs=50,
+    "dnn_3": DNN(input_shape=len(data.feature_cols), shape=[60, len(data.category)],
+                 activations=["relu", "identity"], eta=.5, softmax=True, max_epochs=30,
                  regularization=0,
                  minibatch_size=20, momentum=.9, decay_power=.2, verbose=True
                  ),
