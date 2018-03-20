@@ -4,14 +4,14 @@ A machine learning library build on python, pandas and numpy
 </br>
 
 ```python
-from mentat import ZDataFrame
-from mentat.preprocessor import StandardScaler
-from mentat.model import LogisticRegression, DNN
-from mentat.trainer import MultiModelTrainer
-from mentat.pipeline import Pipeline
-from mentat.evaluator import ClassificationEvaluator
 import pandas as pd
-import numpy as np
+
+from mentat import ZDataFrame
+from mentat.evaluator import ClassificationEvaluator
+from mentat.model import DNN
+from mentat.pipeline import Pipeline
+from mentat.preprocessor import StandardScaler
+from mentat.trainer import MultiModelTrainer
 
 # load and construct the data frame
 df = pd.read_csv("../data/bird.csv")
@@ -71,5 +71,4 @@ predict = pipeline.evaluate(to_be_predicted)
 # ZDataFrame is callable, return the data(pandas DataFrame) it contains
 print("\n--------- Some Predictions -----------")
 print(predict().head(5))
-
 ```

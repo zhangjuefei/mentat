@@ -1,11 +1,11 @@
-from mentat import ZDataFrame
-from mentat.preprocessor import StandardScaler
-from mentat.model import LogisticRegression, DNN
-from mentat.trainer import MultiModelTrainer
-from mentat.pipeline import Pipeline
-from mentat.evaluator import ClassificationEvaluator
 import pandas as pd
-import numpy as np
+
+from mentat import ZDataFrame
+from mentat.evaluator import ClassificationEvaluator
+from mentat.model import DNN
+from mentat.pipeline import Pipeline
+from mentat.preprocessor import StandardScaler
+from mentat.trainer import MultiModelTrainer
 
 # load and construct the data frame
 df = pd.read_csv("../data/bird.csv")
