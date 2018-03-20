@@ -1,6 +1,6 @@
 MENTAT
 ==
-A machine learning library build on python, pandas and numpy
+A machine learning library build on python, numpy and pandas.
 </br>
 
 ```python
