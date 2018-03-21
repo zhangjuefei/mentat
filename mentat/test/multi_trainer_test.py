@@ -16,28 +16,16 @@ train_and_test, to_be_predicted = data.split(.7)
 
 # construct 3 models(DNN) with dirfferent hyperparameters(size of hidden layer and max epochs here)
 dnns = {
-    "dnn_1": DNN(input_shape=len(data.feature_cols), shape=[2, len(data.category)],
-                 activations=["relu", "identity"], eta=.5, softmax=True, max_epochs=2,
-                 regularization=0,
-                 minibatch_size=20, momentum=.9, decay_power=.2, verbose=False
-                 ),
-    "dnn_2": DNN(input_shape=len(data.feature_cols), shape=[20, len(data.category)],
-                 activations=["relu", "identity"], eta=.5, softmax=True, max_epochs=20,
-                 regularization=0,
-                 minibatch_size=20, momentum=.9, decay_power=.2, verbose=False
-                 ),
-    "dnn_3": DNN(input_shape=len(data.feature_cols), shape=[60, len(data.category)],
-                 activations=["relu", "identity"], eta=.5, softmax=True, max_epochs=30,
-                 regularization=0,
-                 minibatch_size=20, momentum=.9, decay_power=.2, verbose=False
-                 ),
+    "dnn_1": DNN(len(data.feature_cols), [2, len(data.category)], ["relu", "identity"], softmax=True, max_epochs=2),
+    "dnn_2": DNN(len(data.feature_cols), [20, len(data.category)], ["relu", "identity"], softmax=True, max_epochs=20),
+    "dnn_3": DNN(len(data.feature_cols), [60, len(data.category)], ["relu", "identity"], softmax=True, max_epochs=30)
 }
 
 # construct a pipeline contains a standardizer and a multi-model trainner(train 3 DNN parallelly)
 pipeline = Pipeline(
     {
         "preprocessor": StandardScaler(),
-        "trainer": MultiModelTrainer(dnns, train_fraction=0.7, evaluator=ClassificationEvaluator(),
+        "trainer": MultiModelTrainer(dnns, train_fraction=.7, evaluator=ClassificationEvaluator(),
                                      metric="accuracy")
     }
 )

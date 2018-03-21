@@ -4,8 +4,8 @@ from .base import Model
 
 
 class DNN(Model):
-    def __init__(self, input_shape, shape, activations, eta=0.1, threshold=1e-5, softmax=False, max_epochs=1000,
-                 regularization=0.001, minibatch_size=5, momentum=0.9, decay_power=0.5, verbose=False):
+    def __init__(self, input_shape, shape, activations, eta=0.5, threshold=1e-5, softmax=False, max_epochs=20,
+                 regularization=0, minibatch_size=20, momentum=0.9, decay_power=0.2, verbose=False):
         Model.__init__(self)
 
         if not len(shape) == len(activations):
