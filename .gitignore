@@ -109,3 +109,5 @@ ENV/
 *.png
 *.jpg
 *.bmp
+
+backup/
