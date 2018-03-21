@@ -89,9 +89,7 @@ class ModelTest(unittest.TestCase):
         pipeline.fit(self.regression_data)
 
         eva = pipeline.get_operator("trainer").get_evaluator()
-        self.assertGreater(eva.opposite_mse(), -.5, "mse is too high")
-
-        print(pipeline.get_operator("trainer").metrics)
+        self.assertLess(eva.mse(), .3, "mse is too high")
 
 
 if __name__ == "__main__":

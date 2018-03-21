@@ -15,10 +15,12 @@ class RegressionEvaluator(Evaluator):
         return self
 
     def get_metric(self, metric):
-        if metric == "opposite_mse":
-            return self.opposite_mse()
+        if metric == "mse":
+            return self.mse()
+        elif metric == "opposite_mse":
+            return -self.mse()
         else:
             raise ParameterException("metric {:s} unsupported.".format(metric))
 
-    def opposite_mse(self):
-        return -np.mean(np.power(self.prediction.data["predict_value"] - self.prediction.response().ravel(), 2))
+    def mse(self):
+        return np.mean(np.power(self.prediction.data["predict_value"] - self.prediction.response().ravel(), 2))
