@@ -1,1 +1,2 @@
-from .classification_evaluator import ClassificationEvaluator
+from .classification import ClassificationEvaluator
+from .regression import RegressionEvaluator

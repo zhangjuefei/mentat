@@ -4,7 +4,7 @@ import os
 import numpy as np
 
 from mentat import ZDataFrame
-from mentat.evaluator import ClassificationEvaluator
+from mentat.evaluator import ClassificationEvaluator, RegressionEvaluator
 from mentat.model import DNN, LogisticRegression, LinearRegression
 from mentat.pipeline import Pipeline
 from mentat.preprocessor import StandardScaler
@@ -12,10 +12,10 @@ from mentat.trainer import MultiModelTrainer
 
 DATA_PATH = "../data"
 
+
 class ModelTest(unittest.TestCase):
 
     def setUp(self):
-
         self.bird = ZDataFrame(
             pd.read_csv(DATA_PATH + os.path.sep + "bird.csv"),
             "type",
@@ -73,20 +73,25 @@ class ModelTest(unittest.TestCase):
         self.assertGreater(eva.accuracy(), 0.75, "accuracy is too low")
 
     def test_linear_regression(self):
-
         lr_arr = {
-            "sgd_lr": LinearRegression(method="sgd", eta=0.01, decay_power=0.5, regularization=3.0, max_epochs=1000,
-                             minibatch_size=100),
+            "sgd_lr": LinearRegression(method="sgd", eta=0.01, decay_power=0.5, regularization=30.0, max_epochs=1000,
+                                       minibatch_size=100),
             "lr": LinearRegression(method="analytic", regularization=0)
         }
 
         pipeline = Pipeline(
             {
-                "trainer": MultiModelTrainer(lr_arr, train_fraction=.7)
+                "trainer": MultiModelTrainer(lr_arr, train_fraction=.7, evaluator=RegressionEvaluator(),
+                                             metric="opposite_mse")
             }
         )
 
         pipeline.fit(self.regression_data)
+
+        eva = pipeline.get_operator("trainer").get_evaluator()
+        self.assertGreater(eva.opposite_mse(), -.5, "mse is too high")
+
+        print(pipeline.get_operator("trainer").metrics)
 
 
 if __name__ == "__main__":
