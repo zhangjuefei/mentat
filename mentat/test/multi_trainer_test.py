@@ -11,17 +11,17 @@ from mentat.trainer import MultiModelTrainer
 df = pd.read_csv("../data/bird.csv")
 data = ZDataFrame(df, response_column="type", ignores=["id"], response_encode="multiclass").impute("mean")
 
-# split the data into train(and test) dataset and dataset to be predicted
+# split the data into train(and test) data set and data set to be predicted
 train_and_test, to_be_predicted = data.split(.7)
 
-# construct 3 models(DNN) with dirfferent hyperparameters(size of hidden layer and max epochs here)
+# construct 3 models(DNN) with different hyper-parameters(size of hidden layer and max epochs here)
 dnns = {
     "dnn_1": DNN(len(data.feature_cols), [2, len(data.category)], ["relu", "identity"], softmax=True, max_epochs=2),
     "dnn_2": DNN(len(data.feature_cols), [20, len(data.category)], ["relu", "identity"], softmax=True, max_epochs=20),
     "dnn_3": DNN(len(data.feature_cols), [60, len(data.category)], ["relu", "identity"], softmax=True, max_epochs=30)
 }
 
-# construct a pipeline contains a standardizer and a multi-model trainner(train 3 DNN parallelly)
+# construct a pipeline contains a standard scaler and a multi-model trainer(train 3 DNN parallel)
 pipeline = Pipeline(
     {
         "preprocessor": StandardScaler(),
