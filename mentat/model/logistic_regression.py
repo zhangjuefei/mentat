@@ -23,7 +23,7 @@ class LogisticRegression(Model):
 
     def train(self, features, response):
         x = np.mat(np.c_[[1.0] * features.shape[0], features])
-        y = np.mat(response).T
+        y = np.mat(response)
         I = np.eye(x.shape[1])
         self.beta = np.mat(np.random.random((x.shape[1], 1)) / 100)
         accu_gradient = np.mat(np.zeros(self.beta.shape))

@@ -17,7 +17,7 @@ class Trainer(Operator):
     def evaluate(self, data):
 
         if self.best_model is None:
-            raise ModelException("not trainned")
+            return None
 
         return self.best_model.evaluate(data)
 

@@ -51,7 +51,7 @@ class ZDataFrame:
                 [int(np.where(self.category == v)[0][0]) for v in self.data[self.response_column]])
 
             if self.response_encode == "binary":
-                return response_category
+                return response_category.reshape(-1, 1)
             elif self.response_encode == "multiclass":
                 response = np.zeros((self.data.shape[0], len(self.category)))
                 response[np.arange(response.shape[0]), response_category] = 1
@@ -60,7 +60,7 @@ class ZDataFrame:
             else:
                 raise UnSupportException(self.response_encode)
         else:
-            return self.data[self.response_column].values
+            return self.data[self.response_column].values.reshape(-1, 1)
 
     def split(self, fraction=0.75):
 
