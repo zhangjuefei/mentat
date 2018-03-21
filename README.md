@@ -43,7 +43,7 @@ dnns = {
 pipeline = Pipeline(
     {
         "preprocessor": StandardScaler(),
-        "trainer": MultiModelTrainer(dnns, train_fraction=0.7, evaluator=ClassificationEvaluator(),
+        "trainer": MultiModelTrainer(dnns, train_fraction=.7, evaluator=ClassificationEvaluator(),
                                      metric="accuracy")
     }
 )
