@@ -11,14 +11,18 @@ from mentat.trainer import MultiModelTrainer
 df = pd.read_csv("../data/bird.csv")
 data = ZDataFrame(df, response_column="type", ignores=["id"], response_encode="multiclass").impute("mean")
 
+# number of features(input size) and number of categories(output size)
+input_size = len(data.feature_cols)
+output_size = len(data.category)
+
 # split the data into train(and test) data set and data set to be predicted
 train_and_test, to_be_predicted = data.split(.7)
 
 # construct 3 models(DNN) with different hyper-parameters(size of hidden layer and max epochs here)
 dnns = {
-    "dnn_1": DNN(len(data.feature_cols), [2, len(data.category)], ["relu", "identity"], softmax=True, max_epochs=2),
-    "dnn_2": DNN(len(data.feature_cols), [20, len(data.category)], ["relu", "identity"], softmax=True, max_epochs=20),
-    "dnn_3": DNN(len(data.feature_cols), [60, len(data.category)], ["relu", "identity"], softmax=True, max_epochs=30)
+    "dnn_1": DNN(input_size, [2, output_size], ["relu", "identity"], softmax=True, max_epochs=2),
+    "dnn_2": DNN(input_size, [20, output_size], ["relu", "identity"], softmax=True, max_epochs=20),
+    "dnn_3": DNN(input_size, [60, output_size], ["relu", "identity"], softmax=True, max_epochs=30)
 }
 
 # construct a pipeline contains a standard scaler and a multi-model trainer(train 3 DNN parallel)
