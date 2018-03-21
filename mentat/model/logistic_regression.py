@@ -4,9 +4,8 @@ from ..exception import UnSupportException
 
 
 class LogisticRegression(Model):
-    def __init__(self, method="Gradient", eta=0.1, threshold=1e-5, max_epochs=10, regularization=0.1, minibatch_size=5,
-                 momentum=0.9, decay_power=0.5,
-                 verbose=False):
+    def __init__(self, method="Gradient", eta=0.1, threshold=1e-5, max_epochs=100, regularization=0.0001,
+                 minibatch_size=10, momentum=0.9, decay_power=0.25, verbose=False):
         Model.__init__(self)
 
         self.method = str(method)  # IRLS, Newton or Gradient
@@ -53,7 +52,8 @@ class LogisticRegression(Model):
                 z = minibatch_x * self.beta + w.I * (minibatch_y - p)
                 self.beta = (minibatch_x.T * w * minibatch_x + 1e-10 * I).I * minibatch_x.T * w * z
             elif self.method == "Newton":
-                self.beta = self.beta + effective_eta * (minibatch_x.T * w * minibatch_x + 1e-10 * I).I * minibatch_x.T * (minibatch_y - p)
+                self.beta = self.beta + effective_eta * (
+                        minibatch_x.T * w * minibatch_x + 1e-10 * I).I * minibatch_x.T * (minibatch_y - p)
             elif self.method == "Gradient":
                 accu_gradient = accu_gradient * self.momentum + effective_eta * (
                         -minibatch_x.T * (minibatch_y - p) + self.regularization * self.beta)
@@ -73,7 +73,8 @@ class LogisticRegression(Model):
                 loss = []
 
                 if self.verbose:
-                    print("epoch: {:d}. mean loss: {:.6f}. learning rate: {:.8f}".format(epochs, mean_loss, effective_eta))
+                    print("epoch: {:d}. mean loss: {:.6f}. learning rate: {:.8f}".format(epochs, mean_loss,
+                                                                                         effective_eta))
 
                 if epochs >= self.max_epochs or mean_loss < self.threshold:
                     break

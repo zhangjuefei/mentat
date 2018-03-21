@@ -2,15 +2,17 @@ import pandas as pd
 import unittest
 import os
 import numpy as np
+import logging
 
 from mentat import ZDataFrame
 from mentat.evaluator import ClassificationEvaluator, RegressionEvaluator
 from mentat.model import DNN, LogisticRegression, LinearRegression
 from mentat.pipeline import Pipeline
-from mentat.preprocessor import StandardScaler
-from mentat.trainer import MultiModelTrainer
+from mentat.preprocessor import StandardScaler, RobustScaler
+from mentat.trainer import MultiModelTrainer, TrivialTrainer
 
 DATA_PATH = "../data"
+logging.basicConfig(level=logging.INFO)
 
 
 class ModelTest(unittest.TestCase):
@@ -31,14 +33,14 @@ class ModelTest(unittest.TestCase):
         ).impute("mean")
 
         x = np.arange(-2 * np.pi, 2 * np.pi, .1)
-        true_y = 2. * 3. * x
-        y = true_y + np.random.normal(loc=0., scale=0.3, size=len(x))
+        true_y = 2. + 3. * x  # np.sin(x)
+        y = true_y + np.random.normal(loc=0., scale=.6, size=len(x))
         self.regression_data = ZDataFrame(
             pd.DataFrame({"x": x, "y": y}),
             "y",
         )
 
-    def test_multi_trainer(self):
+    def ttest_multi_trainer(self):
         # load and construct the data frame
         data = self.bird
 
@@ -89,7 +91,25 @@ class ModelTest(unittest.TestCase):
         pipeline.fit(self.regression_data)
 
         eva = pipeline.get_operator("trainer").get_evaluator()
-        self.assertLess(eva.mse(), .3, "mse is too high")
+
+        logging.info("R^2: {:.3f}".format(eva.r2()))
+        logging.info("Explained Variance: {:.3f}".format(eva.explained_variance()))
+        self.assertLess(eva.mse(), .6, "mse is too high")
+
+    def test_logistic_regression(self):
+        pipeline = Pipeline(
+            {
+                "preprocessor": RobustScaler(),
+                "trainer": TrivialTrainer(LogisticRegression(), train_fraction=.7, evaluator=ClassificationEvaluator())
+            }
+        )
+
+        pipeline.fit(self.pelvis)
+
+        eva = pipeline.get_operator("trainer").get_evaluator()
+        logging.info("accuracy: {:.3f}\n".format(eva.accuracy()))
+        logging.info("classification report:\n" + str(eva.report()))
+        self.assertGreater(eva.accuracy(), .6, "accuracy is too low")
 
 
 if __name__ == "__main__":
