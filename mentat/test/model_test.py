@@ -40,7 +40,7 @@ class ModelTest(unittest.TestCase):
             "y",
         )
 
-    def ttest_multi_trainer(self):
+    def test_multi_trainer(self):
         # load and construct the data frame
         data = self.bird
 
