@@ -1,6 +1,6 @@
 MENTAT
 ==
-"Thou shalt not make a machine in the likeness of a human mind."  -- O.C. Bible
+"Thou shalt not make a machine in the likeness of a human mind."&nbsp;&nbsp;&nbsp;&nbsp;-- O.C. Bible
 </br>
 ```python
 import pandas as pd
