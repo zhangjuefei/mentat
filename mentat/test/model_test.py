@@ -18,27 +18,30 @@ logging.basicConfig(level=logging.INFO)
 class ModelTest(unittest.TestCase):
 
     def setUp(self):
-        self.bird = ZDataFrame(
-            pd.read_csv(DATA_PATH + os.path.sep + "bird.csv"),
-            "type",
-            ["id"],
-            "multiclass"
-        ).impute("mean")
+        if not hasattr(self, "initialized"):
+            self.bird = ZDataFrame(
+                pd.read_csv(DATA_PATH + os.path.sep + "bird.csv"),
+                "type",
+                ["id"],
+                "multiclass"
+            ).impute("mean")
 
-        self.pelvis = ZDataFrame(
-            pd.read_csv(DATA_PATH + os.path.sep + "column_2C_weka.csv"),
-            "class",
-            [],
-            "binary"
-        ).impute("mean")
+            self.pelvis = ZDataFrame(
+                pd.read_csv(DATA_PATH + os.path.sep + "column_2C_weka.csv"),
+                "class",
+                [],
+                "binary"
+            ).impute("mean")
 
-        x = np.arange(-2 * np.pi, 2 * np.pi, .1)
-        true_y = 2. + 3. * x  # np.sin(x)
-        y = true_y + np.random.normal(loc=0., scale=.6, size=len(x))
-        self.regression_data = ZDataFrame(
-            pd.DataFrame({"x": x, "y": y}),
-            "y",
-        )
+            x = np.arange(-2 * np.pi, 2 * np.pi, .1)
+            true_y = 2. + 3. * x  # np.sin(x)
+            y = true_y + np.random.normal(loc=0., scale=.6, size=len(x))
+            self.regression_data = ZDataFrame(
+                pd.DataFrame({"x": x, "y": y}),
+                "y",
+            )
+
+            self.initialized = True
 
     def test_multi_trainer(self):
         logging.info("\n\ncase: test_multi_trainer\n")
