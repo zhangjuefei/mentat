@@ -24,7 +24,7 @@ class ZDataFrame:
         new_column = self.data.columns.difference(origin_columns)
         self.data = self.data.drop(new_column, axis=1)
 
-        if response_column and self.category is None:
+        if response_column and response_encode and self.category is None:
             self.category = np.unique(self.data[self.response_column])
 
     def features(self):
