@@ -41,6 +41,7 @@ class ModelTest(unittest.TestCase):
         )
 
     def test_multi_trainer(self):
+        logging.info("\n\ncase: test_multi_trainer\n")
         # load and construct the data frame
         data = self.bird
 
@@ -72,9 +73,12 @@ class ModelTest(unittest.TestCase):
 
         # metrics of the chosen(best) DNN
         eva = pipeline.get_operator("trainer").get_evaluator()
-        self.assertGreater(eva.accuracy(), 0.75, "accuracy is too low")
+        logging.info("accuracy: {:.3f}".format(eva["accuracy"]))
+        logging.info("confision_matric:\n" + str(eva["confusion_matrix"]))
+        self.assertGreater(eva["accuracy"], 0.75, "accuracy is too low")
 
     def test_linear_regression(self):
+        logging.info("\n\ncase: test_linear_regression\n")
         lr_arr = {
             "sgd_lr": LinearRegression(method="sgd", eta=0.01, decay_power=0.5, regularization=30.0, max_epochs=1000,
                                        minibatch_size=100),
@@ -92,11 +96,12 @@ class ModelTest(unittest.TestCase):
 
         eva = pipeline.get_operator("trainer").get_evaluator()
 
-        logging.info("R^2: {:.3f}".format(eva.r2()))
-        logging.info("Explained Variance: {:.3f}".format(eva.explained_variance()))
-        self.assertLess(eva.mse(), .6, "mse is too high")
+        logging.info("R^2: {:.3f}".format(eva["R2"]))
+        logging.info("Explained Variance: {:.3f}".format(eva["explained_variance"]))
+        self.assertLess(eva["mse"], .6, "mse is too high")
 
     def test_logistic_regression(self):
+        logging.info("\n\ncase: test_logistic_regression\n")
         pipeline = Pipeline(
             {
                 "preprocessor": RobustScaler(),
@@ -107,9 +112,9 @@ class ModelTest(unittest.TestCase):
         pipeline.fit(self.pelvis)
 
         eva = pipeline.get_operator("trainer").get_evaluator()
-        logging.info("accuracy: {:.3f}\n".format(eva.accuracy()))
-        logging.info("classification report:\n" + str(eva.report()))
-        self.assertGreater(eva.accuracy(), .6, "accuracy is too low")
+        logging.info("accuracy: {:.3f}\n".format(eva["accuracy"]))
+        logging.info("classification report:\n" + str(eva["classification_report"]))
+        self.assertGreater(eva["accuracy"], .6, "accuracy is too low")
 
 
 if __name__ == "__main__":

@@ -16,24 +16,11 @@ class RegressionEvaluator(Evaluator):
         self.prediction = data
         self.true = self.prediction.response().ravel()
         self.predict = self.prediction.data["predict_value"].values
+
+        self.metrics["mse"] = np.mean(np.power(self.true - self.predict, 2))
+        self.metrics["opposite_mse"] = -self.metrics["mse"]
+        self.metrics["explained_variance"] = 1 - np.var(self.predict - self.true) / np.var(self.true)
+        self.metrics["R2"] = 1 - np.sum(np.power(self.true - self.predict, 2)) / np.sum(
+            np.power(self.true - self.true.mean(), 2))
+
         return self
-
-    def get_metric(self, metric):
-        if metric == "mse":
-            return self.mse()
-        elif metric == "opposite_mse":
-            return -self.mse()
-        elif metric == "explained_variance":
-            return self.explained_variance()
-        else:
-            raise ParameterException("metric {:s} unsupported.".format(metric))
-
-    def mse(self):
-        return np.mean(np.power(self.true - self.predict, 2))
-
-    def explained_variance(self):
-        return 1. - np.var(self.predict - self.true) / np.var(self.true)
-
-    def r2(self):
-
-        return 1 - np.sum(np.power(self.true - self.predict, 2)) / np.sum(np.power(self.true - self.true.mean(), 2))

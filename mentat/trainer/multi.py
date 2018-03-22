@@ -24,7 +24,7 @@ class MultiModelTrainer(MultiTrainer):
             for name, model in self.models.items():
                 evaluator = copy.deepcopy(self.evaluator)
                 self.evaluators[name] = evaluator.fit(model.evaluate(test))
-                self.metrics[name] = self.evaluators[name].get_metric(self.metric)
+                self.metrics[name] = self.evaluators[name][self.metric]
 
             self.best_model = self.models[max(self.metrics, key=self.metrics.get)]
             self.evaluator = self.evaluators[max(self.metrics, key=self.metrics.get)]
