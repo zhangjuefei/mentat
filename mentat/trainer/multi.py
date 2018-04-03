@@ -6,13 +6,9 @@ from .base import MultiTrainer
 
 class MultiModelTrainer(MultiTrainer):
     def __init__(self, models, train_fraction=0.75, evaluator=None, metric=None):
-        super().__init__()
-        self.train_fraction = train_fraction
+        super().__init__(train_fraction, evaluator, metric)
+
         self.models = OrderedDict(models)
-        self.evaluator = evaluator
-        self.metric = metric
-        self.metrics = {}
-        self.evaluators = {}
 
     def train(self, data):
         train, test = data.split(self.train_fraction)
@@ -31,4 +27,3 @@ class MultiModelTrainer(MultiTrainer):
 
     def get_evaluator(self):
         return self.evaluator
-

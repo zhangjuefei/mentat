@@ -1,7 +1,8 @@
-import abc
 from threading import Thread
+
+import abc
+
 from ..base import Operator
-from ..exception import ModelException
 
 
 class Trainer(Operator):
@@ -15,7 +16,6 @@ class Trainer(Operator):
         self.train(data)
 
     def evaluate(self, data):
-
         if self.best_model is None:
             return None
 
@@ -28,6 +28,15 @@ class Trainer(Operator):
 
 class MultiTrainer(Trainer):
     __metaclass__ = abc.ABCMeta
+
+    def __init__(self, train_fraction=0.75, evaluator=None, metric=None):
+        super().__init__()
+
+        self.train_fraction = train_fraction
+        self.evaluator = evaluator
+        self.metric = metric
+        self.metrics = {}
+        self.evaluators = {}
 
     @abc.abstractmethod
     def train(self, data):
