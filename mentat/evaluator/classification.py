@@ -1,7 +1,6 @@
-from .base import Evaluator
-from ..exception import ParameterException
-
 import pandas as pd
+
+from .base import Evaluator
 
 
 class ClassificationEvaluator(Evaluator):

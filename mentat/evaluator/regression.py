@@ -1,7 +1,6 @@
-from .base import Evaluator
-from ..exception import ParameterException
-
 import numpy as np
+
+from .base import Evaluator
 
 
 class RegressionEvaluator(Evaluator):
@@ -24,3 +23,6 @@ class RegressionEvaluator(Evaluator):
             np.power(self.true - self.true.mean(), 2))
 
         return self
+
+    def evaluate(self, data):
+        return None
