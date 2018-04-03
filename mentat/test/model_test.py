@@ -65,7 +65,8 @@ class ModelTest(unittest.TestCase):
                 "trainer": GridSearchTrainer(dnn,
                                              params={
                                                  "eta": [0.1, 0.5],
-                                                 "max_epochs": [10, 20, 30]
+                                                 "max_epochs": [10, 20, 30],
+                                                 "momentum": [0.5, 0.7, 0.9]
                                              },
                                              train_fraction=.7,
                                              evaluator=ClassificationEvaluator(),

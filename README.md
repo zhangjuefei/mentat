@@ -1,6 +1,11 @@
 MENTAT
 ==
-"Thou shalt not make a machine in the likeness of a human mind."&nbsp;&nbsp;&nbsp;&nbsp;-- O.C. Bible
+<pre>
+The future will be an ever more demanding struggle against the limitations of our intelligence,
+not a comfortable hammock in which we can lie down to be waited upon by our robot slaves.
+
+                                                -- Norbert Wiener “The Human Use Of Human Beings”
+</pre>
 </br>
 ```python
 import pandas as pd
