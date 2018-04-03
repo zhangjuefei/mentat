@@ -44,7 +44,7 @@ class ModelTest(unittest.TestCase):
             self.initialized = True
 
     def test_grid_search_trainner(self):
-        logging.info("\n\ncase: test_grid_search_trainer\n")
+        logging.info("\n\nCASE: TEST GRID-SEARCH TRAINER\n")
         # load and construct the data frame
         data = self.bird
 
@@ -65,7 +65,7 @@ class ModelTest(unittest.TestCase):
                 "trainer": GridSearchTrainer(dnn,
                                              params={
                                                  "eta": [0.1, 0.5],
-                                                 "max_epochs": [10, 20]
+                                                 "max_epochs": [10, 20, 30]
                                              },
                                              train_fraction=.7,
                                              evaluator=ClassificationEvaluator(),
@@ -83,12 +83,12 @@ class ModelTest(unittest.TestCase):
 
         grid_metrics = pipeline.get_operator("trainer").metrics
 
-        logging.info("grid metrics: \n" + "\n".join(
+        logging.info("grid-search metrics: \n" + "\n".join(
             list(map(lambda t: str(t[0]) + ": " + str(t[1]), list(grid_metrics.items())))))
         self.assertGreater(eva["accuracy"], 0.70, "accuracy is too low")
 
     def test_multi_trainer(self):
-        logging.info("\n\ncase: test_multi_trainer\n")
+        logging.info("\n\nCASE: TEST MULTI-MODEL TRAINER\n")
         # load and construct the data frame
         data = self.bird
 
@@ -122,10 +122,14 @@ class ModelTest(unittest.TestCase):
         eva = pipeline.get_operator("trainer").get_evaluator()
         logging.info("accuracy: {:.3f}".format(eva["accuracy"]))
         logging.info("confision_matric:\n" + str(eva["confusion_matrix"]))
+
+        multi_model_metrics = pipeline.get_operator("trainer").metrics
+        logging.info("multi-model metrics: \n" + "\n".join(
+            list(map(lambda t: str(t[0]) + ": " + str(t[1]), list(multi_model_metrics.items())))))
         self.assertGreater(eva["accuracy"], 0.75, "accuracy is too low")
 
     def test_linear_regression(self):
-        logging.info("\n\ncase: test_linear_regression\n")
+        logging.info("\n\nCASE: TEST LINEAR REGRESSION\n")
         lr_arr = {
             "sgd_lr": LinearRegression(method="sgd", eta=0.01, decay_power=0.5, regularization=30.0, max_epochs=1000,
                                        minibatch_size=100),
@@ -148,7 +152,7 @@ class ModelTest(unittest.TestCase):
         self.assertLess(eva["mse"], .6, "mse is too high")
 
     def test_logistic_regression(self):
-        logging.info("\n\ncase: test_logistic_regression\n")
+        logging.info("\n\nCASE: TEST LOGISTIC REGRESSION\n")
         pipeline = Pipeline(
             {
                 "preprocessor": RobustScaler(),
