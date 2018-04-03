@@ -43,7 +43,7 @@ class ModelTest(unittest.TestCase):
 
             self.initialized = True
 
-    def test_grid_search(self):
+    def test_grid_search_trainner(self):
         logging.info("\n\ncase: test_grid_search_trainer\n")
         # load and construct the data frame
         data = self.bird
