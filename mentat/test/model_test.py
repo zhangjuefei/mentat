@@ -44,7 +44,7 @@ class ModelTest(unittest.TestCase):
             self.initialized = True
 
     def test_grid_search(self):
-        logging.info("\n\ncase: test_multi_trainer\n")
+        logging.info("\n\ncase: test_grid_search_trainer\n")
         # load and construct the data frame
         data = self.bird
 
@@ -55,10 +55,10 @@ class ModelTest(unittest.TestCase):
         # split the data into train(and test) data set and data set to be predicted
         train_and_test, to_be_predicted = data.split(.7)
 
-        # construct 3 models(DNN) with different hyper-parameters(size of hidden layer and max epochs here)
+        # construct a model(DNN)
         dnn = DNN(input_size, [10, output_size], ["relu", "identity"], softmax=True)
 
-        # construct a pipeline contains a standard scaler and a multi-model trainer(train 3 DNN parallel)
+        # construct a pipeline contains a standard scaler and a grid search trainer.
         pipeline = Pipeline(
             {
                 "preprocessor": StandardScaler(),
