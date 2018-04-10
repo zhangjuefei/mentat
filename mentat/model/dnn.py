@@ -1,9 +1,28 @@
 import numpy as np
 from ..exception import UnSupportException, ParameterException
 from .base import Model
+from ..util import ParamValidator
 
 
 class DNN(Model):
+
+    pv = ParamValidator(
+        {
+            "input_shape": {"type": int},
+            "shape": {"type": list},
+            "activations" : {"type": list},
+            "eta": {"type": [int, float]},
+            "threshold": {"type": [int, float]},
+            "softmax": {"type": bool},
+            "max_epochs": {"type": int},
+            "regularization": {"type": [int, float]},
+            "minibatch_size": {"type": int},
+            "momentum": {"type": [int, float], "range": [0.0, 1.0]},
+            "decay_power": {"type": [int, float]},
+            "verbose": {"type": bool},
+        }
+    )
+
     def __init__(self, input_shape, shape, activations, eta=0.5, threshold=1e-5, softmax=False, max_epochs=20,
                  regularization=0, minibatch_size=20, momentum=0.9, decay_power=0.2, verbose=False):
         Model.__init__(self)
@@ -11,24 +30,26 @@ class DNN(Model):
         if not len(shape) == len(activations):
             raise ParameterException("activations must equal to number od layers.")
 
-        self.depth = len(shape)
+        self.pv("input_shape", input_shape)
+        self.depth = len(self.pv("shape", shape))
         self.activity_levels = [np.mat([0])] * self.depth
         self.outputs = [np.mat(np.mat([0]))] * (self.depth + 1)
         self.deltas = [np.mat(np.mat([0]))] * self.depth
-        self.eta = float(eta)
+
+        self.eta = self.pv("eta", eta)
         self.effective_eta = self.eta
-        self.threshold = float(threshold)
-        self.max_epochs = int(max_epochs)
-        self.regularization = float(regularization)
-        self.is_softmax = bool(softmax)
-        self.verbose = bool(verbose)
-        self.minibatch_size = int(minibatch_size)
-        self.momentum = float(momentum)
-        self.decay_power = float(decay_power)
+        self.threshold = self.pv("threshold", threshold)
+        self.max_epochs = self.pv("max_epochs", max_epochs)
+        self.regularization = self.pv("regularization", regularization)
+        self.is_softmax = self.pv("softmax", softmax)
+        self.verbose = self.pv("verbose", verbose)
+        self.minibatch_size = self.pv("minibatch_size", minibatch_size)
+        self.momentum = self.pv("momentum", momentum)
+        self.decay_power = self.pv("decay_power", decay_power)
         self.iterations = 0
         self.epochs = 0
 
-        self.activations = activations
+        self.activations = self.pv("activations", activations)
         self.activation_func = []
         self.activation_func_diff = []
         for f in activations:
