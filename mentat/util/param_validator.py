@@ -30,28 +30,40 @@ class ParamValidator:
             if not ("allow_none" in spec.keys() and spec.get("allow_none")):
                 raise ParameterException("parameter {:s} must not be None".format(name))
 
-        if spec.get("type"):
+        else:
+            if spec.get("type"):
 
-            allow_type = spec.get("type")
+                allow_type = spec.get("type")
 
-            if isinstance(allow_type, list):
+                if isinstance(allow_type, list):
 
-                validate = False
-                for tpe in allow_type:
-                    if isinstance(value, tpe):
-                        validate = True
+                    validate = False
+                    for tpe in allow_type:
+                        if isinstance(value, tpe):
+                            validate = True
 
-                if not validate:
-                    raise ParameterException(
-                        "parameter \"{:s}\" must be of type: {:s}".format(name, " or ".join([str(t) for t in allow_type])))
-            elif not isinstance(value, allow_type):
-                raise ParameterException("parameter \"{:s}\" must be of type: {:s}".format(name, str(allow_type)))
+                    if not validate:
+                        raise ParameterException(
+                            "parameter \"{:s}\" must be of type: {:s}".format(name,
+                                                                              " or ".join(
+                                                                                  [str(t) for t in allow_type])))
+                elif not isinstance(value, allow_type):
+                    raise ParameterException("parameter \"{:s}\" must be of type: {:s}".format(name, str(allow_type)))
 
-        if spec.get("range"):
-            min_value, max_value = spec.get("range")
+            if spec.get("range"):
 
-            if value < min_value or value > max_value:
-                raise ParameterException("parameter \"{:s}\" must be in [{:f}, {:f}]".format(name, min_value, max_value))
+                range = spec.get("range")
+
+                if isinstance(range, tuple):
+                    min_value, max_value = spec.get("range")
+
+                    if value < min_value or value > max_value:
+                        raise ParameterException(
+                            "parameter \"{:s}\" must be in [{:f}, {:f}]".format(name, min_value, max_value))
+                elif isinstance(range, list):
+                    if value not in range:
+                        raise ParameterException(
+                            "parameter \"{:s}\" must be in {{:s}{".format(name, ", ".join(range)))
 
         return value
 

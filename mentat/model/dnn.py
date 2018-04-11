@@ -5,19 +5,18 @@ from ..util import ParamValidator
 
 
 class DNN(Model):
-
     pv = ParamValidator(
         {
             "input_shape": {"type": int},
             "shape": {"type": list},
-            "activations" : {"type": list},
+            "activations": {"type": list},
             "eta": {"type": [int, float]},
             "threshold": {"type": [int, float]},
             "softmax": {"type": bool},
             "max_epochs": {"type": int},
             "regularization": {"type": [int, float]},
             "minibatch_size": {"type": int},
-            "momentum": {"type": [int, float], "range": [0.0, 1.0]},
+            "momentum": {"type": [int, float], "range": (0.0, 1.0)},
             "decay_power": {"type": [int, float]},
             "verbose": {"type": bool},
         }
@@ -54,6 +53,7 @@ class DNN(Model):
         self.activation_func_diff = []
         for f in activations:
 
+            f = f.lower()
             if f == "sigmoid":
                 self.activation_func.append(np.vectorize(self.sigmoid))
                 self.activation_func_diff.append(np.vectorize(self.sigmoid_diff))
@@ -63,6 +63,9 @@ class DNN(Model):
             elif f == "relu":
                 self.activation_func.append(np.vectorize(self.relu))
                 self.activation_func_diff.append(np.vectorize(self.relu_diff))
+            elif f == "tanh":
+                self.activation_func.append(np.vectorize(self.tanh))
+                self.activation_func_diff.append(np.vectorize(self.tanh_diff))
             else:
                 raise UnSupportException("activation function {:s}".format(f))
 
@@ -71,11 +74,11 @@ class DNN(Model):
         self.acc_weights_delta = [np.mat(np.mat([0]))] * self.depth
         self.acc_biases_delta = [np.mat(np.mat([0]))] * self.depth
 
-        self.weights[0] = np.mat(np.random.random((shape[0], input_shape)) / 100)
-        self.biases[0] = np.mat(np.random.random((shape[0], 1)) / 100)
+        self.weights[0] = np.mat(np.random.random((shape[0], input_shape)) / 200)
+        self.biases[0] = np.mat(np.random.random((shape[0], 1)) / 200)
         for idx in np.arange(1, len(shape)):
-            self.weights[idx] = np.mat(np.random.random((shape[idx], shape[idx - 1])) / 100)
-            self.biases[idx] = np.mat(np.random.random((shape[idx], 1)) / 100)
+            self.weights[idx] = np.mat(np.random.random((shape[idx], shape[idx - 1])) / 200)
+            self.biases[idx] = np.mat(np.random.random((shape[idx], 1)) / 200)
 
     def compute(self, x):
         result = x
@@ -99,7 +102,7 @@ class DNN(Model):
         tmp = d.T
 
         for idx in np.arange(0, self.depth)[::-1]:
-            delta = np.multiply(tmp, self.activation_func_diff[idx](self.activity_levels[idx]).T)
+            delta = np.multiply(tmp, self.activation_func_diff[idx](self.outputs[idx + 1]).T)
             self.deltas[idx] = delta
             tmp = delta * self.weights[idx]
 
@@ -174,7 +177,8 @@ class DNN(Model):
 
     @staticmethod
     def sigmoid_diff(x):
-        return np.power(np.e, min(-x, 1e2)) / (1.0 + np.power(np.e, min(-x, 1e2))) ** 2
+        # return np.power(np.e, min(-x, 1e2)) / (1.0 + np.power(np.e, min(-x, 1e2))) ** 2
+        return x * (1 - x)
 
     @staticmethod
     def relu(x):
@@ -191,6 +195,15 @@ class DNN(Model):
     @staticmethod
     def identity_diff(x):
         return 1.0
+
+    @staticmethod
+    def tanh(x):
+        exp = 2 * min(x, 1e2)
+        return (np.power(np.e, exp) - 1) / (np.power(np.e, exp) + 1)
+
+    @staticmethod
+    def tanh_diff(x):
+        return 1 - x * x
 
     @staticmethod
     def softmax(x):

@@ -1,22 +1,31 @@
 import numpy as np
+from pandas import DataFrame as PDataFrame
 
 from .exception import UnSupportException, ParameterException
+from .util import ParamValidator
 
 
 class ZDataFrame:
-
-    response_encode_type = ["binary", "multiclass"]
+    pv = ParamValidator(
+        {
+            "data": {"type": PDataFrame},
+            "response_column": {"type": str, "allow_none": True},
+            "ignores": {"type": list, "allow_none": True},
+            "response_encode": {"type": str, "range": ["binary", "multiclass"], "allow_none": True},
+            "category": {"type": np.ndarray, "allow_none": True}
+        }
+    )
 
     def __init__(self, data, response_column=None, ignores=None, response_encode=None, category=None):
 
-        self.data = data.copy()
-        self.response_column = response_column
-        self.ignores = ignores
+        self.data = self.pv("data", data).copy()
+        self.response_column = self.pv("response_column", response_column)
+        self.ignores = self.pv("ignores", ignores)
         self.feature_cols = self.data.columns.difference(
             [self.response_column] if self.response_column else []).difference(
             self.ignores if self.ignores else [])
-        self.category = category
-        self.response_encode = response_encode
+        self.category = self.pv("category", category)
+        self.response_encode = self.pv("response_encode", response_encode)
 
         # reconstruct the index
         origin_columns = self.data.columns

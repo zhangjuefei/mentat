@@ -56,7 +56,7 @@ class ModelTest(unittest.TestCase):
         train_and_test, to_be_predicted = data.split(.7)
 
         # construct a model(DNN)
-        dnn = DNN(input_size, [10, output_size], ["relu", "identity"], softmax=True)
+        dnn = DNN(input_size, [40, output_size], ["tanh", "identity"], softmax=True)
 
         # construct a pipeline contains a standard scaler and a grid search trainer.
         pipeline = Pipeline(
@@ -102,9 +102,14 @@ class ModelTest(unittest.TestCase):
 
         # construct 3 models(DNN) with different hyper-parameters(size of hidden layer and max epochs here)
         dnns = {
-            "dnn_1": DNN(input_size, [2, output_size], ["relu", "identity"], softmax=True, max_epochs=2),
-            "dnn_2": DNN(input_size, [20, output_size], ["relu", "identity"], softmax=True, max_epochs=20),
-            "dnn_3": DNN(input_size, [60, output_size], ["relu", "identity"], softmax=True, max_epochs=30)
+            "dnn_1": DNN(input_size, [100, 100, 100, output_size], ["sigmoid", "tanh", "relu", "identity"],
+                         softmax=True, max_epochs=60),
+            "dnn_2": DNN(input_size, [60, output_size], ["relu", "identity"], softmax=True, max_epochs=60),
+            "dnn_3": DNN(input_size, [60, output_size], ["sigmoid", "identity"], softmax=True, max_epochs=60),
+            "dnn_4": DNN(input_size, [40, 40, 40, output_size], ["sigmoid", "sigmoid", "sigmoid", "identity"],
+                         softmax=True, max_epochs=60),
+            "dnn_5": DNN(input_size, [40, 40, 40, output_size], ["tanh", "tanh", "tanh", "identity"], eta=.5,
+                         softmax=True, max_epochs=60)
         }
 
         # construct a pipeline contains a standard scaler and a multi-model trainer(train 3 DNN parallel)

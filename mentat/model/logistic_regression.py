@@ -1,22 +1,38 @@
 import numpy as np
 from .base import Model
 from ..exception import UnSupportException
+from ..util import ParamValidator
 
 
 class LogisticRegression(Model):
+
+    pv = ParamValidator(
+        {
+            "method": {"type": str, "range": ["IRLS", "Newton", "Gradient"]},
+            "eta": {"type": [int, float]},
+            "threshold": {"type": [int, float]},
+            "max_epochs": {"type": int},
+            "regularization": {"type": [int, float]},
+            "minibatch_size": {"type": int},
+            "momentum": {"type": [int, float], "range": (0.0, 1.0)},
+            "decay_power": {"type": [int, float]},
+            "verbose": {"type": bool},
+        }
+    )
+
     def __init__(self, method="Gradient", eta=0.1, threshold=1e-5, max_epochs=100, regularization=0.0001,
                  minibatch_size=10, momentum=0.9, decay_power=0.25, verbose=False):
         Model.__init__(self)
 
-        self.method = str(method)  # IRLS, Newton or Gradient
-        self.eta = float(eta)  # learning rate for Newton and Gradient method
-        self.threshold = float(threshold)  # stopping loss threshold
-        self.max_epochs = int(max_epochs)  # max number of iterations
-        self.regularization = float(regularization)  # L2 regularization strength, only for Gradient Descent
-        self.minibatch_size = int(minibatch_size)  # minibatch size
-        self.decay_power = float(decay_power)  # learning rate decaying power for gradient descent and newton
-        self.momentum = float(momentum)  # gradient descent momentum
-        self.verbose = verbose
+        self.method = self.pv("method", method)  # IRLS, Newton or Gradient
+        self.eta = self.pv("eta", eta)  # learning rate for Newton and Gradient method
+        self.threshold = self.pv("threshold", threshold)  # stopping loss threshold
+        self.max_epochs = self.pv("max_epochs", max_epochs)  # max number of iterations
+        self.regularization = self.pv("regularization", regularization)  # L2 regularization strength, only for Gradient Descent
+        self.minibatch_size = self.pv("minibatch_size", minibatch_size)  # minibatch size
+        self.decay_power = self.pv("decay_power", decay_power)  # learning rate decaying power for gradient descent and newton
+        self.momentum = self.pv("momentum", momentum)  # gradient descent momentum
+        self.verbose = self.pv("verbose", verbose)
 
         self.beta = None
 

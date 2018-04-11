@@ -1,36 +1,40 @@
 import numpy as np
 from .base import Model
 from ..exception import UnSupportException
+from ..util import ParamValidator
 
 
 class LinearRegression(Model):
-    methods = ["analytic", "sgd"]
-    penalties = ["L2"]
+
+    pv = ParamValidator(
+        {
+            "method": {"type": str, "range": ["analytic", "sgd"]},
+            "penalty": {"type": str, "range": ["L2"]},
+            "eta": {"type": [int, float]},
+            "threshold": {"type": [int, float]},
+            "max_epochs": {"type": int},
+            "regularization": {"type": [int, float]},
+            "minibatch_size": {"type": int},
+            "momentum": {"type": [int, float], "range": (0.0, 1.0)},
+            "decay_power": {"type": [int, float]},
+            "verbose": {"type": bool},
+        }
+    )
 
     def __init__(self, method="analytic", eta=0.1, penalty="L2", regularization=0, max_epochs=10, threshold=1e-5, minibatch_size=5,
                  momentum=0.9, decay_power=0.5, verbose=False):
         super().__init__()
 
-        method = str(method)
-        if method not in self.methods:
-            raise UnSupportException("method: {:s}".format(method))
-        else:
-            self.method = method
-
-        penalty = str(penalty)
-        if penalty not in self.penalties:
-            raise UnSupportException("penalty: {:s}".format(penalty))
-        else:
-            self.penalty = penalty
-
-        self.eta = float(eta)
-        self.regularization = float(regularization)
-        self.max_epochs = int(max_epochs)
-        self.threshold = float(threshold)
-        self.minibatch_size = int(minibatch_size)
-        self.momentum = float(momentum)
-        self.decay_power = float(decay_power)
-        self.verbose = verbose
+        self.method = self.pv("method", method)
+        self.penalty = self.pv("penalty", penalty)
+        self.eta = self.pv("eta", eta)
+        self.regularization = self.pv("regularization", regularization)
+        self.max_epochs = self.pv("max_epochs", max_epochs)
+        self.threshold = self.pv("threshold", threshold)
+        self.minibatch_size = self.pv("minibatch_size", minibatch_size)
+        self.momentum = self.pv("momentum", momentum)
+        self.decay_power = self.pv("decay_power", decay_power)
+        self.verbose = self.pv("verbose", verbose)
 
     def train(self, features, response):
         # x = np.mat(np.c_[[1.0] * features.shape[0], features])
