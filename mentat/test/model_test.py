@@ -3,6 +3,7 @@ import unittest
 import os
 import numpy as np
 import logging
+logging.basicConfig(level = logging.INFO,format = "%(message)s"  )
 
 from mentat import ZDataFrame
 from mentat.evaluator import ClassificationEvaluator, RegressionEvaluator
@@ -102,13 +103,11 @@ class ModelTest(unittest.TestCase):
 
         # construct 3 models(DNN) with different hyper-parameters(size of hidden layer and max epochs here)
         dnns = {
-            "dnn_1": DNN(input_size, [100, 100, 100, output_size], ["sigmoid", "tanh", "relu", "identity"],
+            "dnn_1": DNN(input_size, [60, output_size], ["relu", "identity"], softmax=True, max_epochs=60),
+            "dnn_2": DNN(input_size, [60, output_size], ["sigmoid", "identity"], softmax=True, max_epochs=60),
+            "dnn_3": DNN(input_size, [40, 40, 40, output_size], ["sigmoid", "sigmoid", "sigmoid", "identity"],
                          softmax=True, max_epochs=60),
-            "dnn_2": DNN(input_size, [60, output_size], ["relu", "identity"], softmax=True, max_epochs=60),
-            "dnn_3": DNN(input_size, [60, output_size], ["sigmoid", "identity"], softmax=True, max_epochs=60),
-            "dnn_4": DNN(input_size, [40, 40, 40, output_size], ["sigmoid", "sigmoid", "sigmoid", "identity"],
-                         softmax=True, max_epochs=60),
-            "dnn_5": DNN(input_size, [40, 40, 40, output_size], ["tanh", "tanh", "tanh", "identity"], eta=.5,
+            "dnn_4": DNN(input_size, [40, 40, 40, output_size], ["tanh", "tanh", "tanh", "identity"], eta=.5,
                          softmax=True, max_epochs=60)
         }
 
@@ -126,13 +125,24 @@ class ModelTest(unittest.TestCase):
 
         # metrics of the chosen(best) DNN
         eva = pipeline.get_operator("trainer").get_evaluator()
-        logging.info("accuracy: {:.3f}".format(eva["accuracy"]))
-        logging.info("confision_matric:\n" + str(eva["confusion_matrix"]))
+
+        logging.info("\nValidation Metrics:")
+        logging.info("Accuracy: {:.3f}".format(eva["accuracy"]))
+        logging.info("Precision & Recall:\n" + str(eva["classification_report"]))
+        logging.info("Confision Matrix:\n" + str(eva["confusion_matrix"]))
 
         multi_model_metrics = pipeline.get_operator("trainer").metrics
         logging.info("multi-model metrics: \n" + "\n".join(
             list(map(lambda t: str(t[0]) + ": " + str(t[1]), list(multi_model_metrics.items())))))
         self.assertGreater(eva["accuracy"], 0.75, "accuracy is too low")
+
+        predict = pipeline.evaluate(to_be_predicted)
+        eva = ClassificationEvaluator().fit(predict)
+
+        logging.info("\nTest Metrics:")
+        logging.info("Accuracy: {:.3f}".format(eva["accuracy"]))
+        logging.info("Precision & Recall:\n" + str(eva["classification_report"]))
+        logging.info("Confision Matrix:\n" + str(eva["confusion_matrix"]))
 
     def test_linear_regression(self):
         logging.info("\n\nCASE: TEST LINEAR REGRESSION\n")
@@ -169,8 +179,8 @@ class ModelTest(unittest.TestCase):
         pipeline.fit(self.pelvis)
 
         eva = pipeline.get_operator("trainer").get_evaluator()
-        logging.info("accuracy: {:.3f}\n".format(eva["accuracy"]))
-        logging.info("classification report:\n" + str(eva["classification_report"]))
+        logging.info("Accuracy: {:.3f}\n".format(eva["accuracy"]))
+        logging.info("Classification Report:\n" + str(eva["classification_report"]))
         self.assertGreater(eva["accuracy"], .6, "accuracy is too low")
 
 

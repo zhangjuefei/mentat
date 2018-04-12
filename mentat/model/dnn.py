@@ -55,17 +55,17 @@ class DNN(Model):
 
             f = f.lower()
             if f == "sigmoid":
-                self.activation_func.append(np.vectorize(self.sigmoid))
-                self.activation_func_diff.append(np.vectorize(self.sigmoid_diff))
+                self.activation_func.append(self.sigmoid)
+                self.activation_func_diff.append(self.sigmoid_diff)
             elif f == "identity":
-                self.activation_func.append(np.vectorize(self.identity))
-                self.activation_func_diff.append(np.vectorize(self.identity_diff))
+                self.activation_func.append(self.identity)
+                self.activation_func_diff.append(self.identity_diff)
             elif f == "relu":
-                self.activation_func.append(np.vectorize(self.relu))
-                self.activation_func_diff.append(np.vectorize(self.relu_diff))
+                self.activation_func.append(self.relu)
+                self.activation_func_diff.append(self.relu_diff)
             elif f == "tanh":
-                self.activation_func.append(np.vectorize(self.tanh))
-                self.activation_func_diff.append(np.vectorize(self.tanh_diff))
+                self.activation_func.append(self.tanh)
+                self.activation_func_diff.append(self.tanh_diff)
             else:
                 raise UnSupportException("activation function {:s}".format(f))
 
@@ -173,20 +173,20 @@ class DNN(Model):
 
     @staticmethod
     def sigmoid(x):
-        return 1.0 / (1.0 + np.power(np.e, min(-x, 1e2)))
+        return 1.0 / (1.0 + np.power(np.e, np.where(-x > 1e2, 1e2, -x)))
+
 
     @staticmethod
     def sigmoid_diff(x):
-        # return np.power(np.e, min(-x, 1e2)) / (1.0 + np.power(np.e, min(-x, 1e2))) ** 2
         return x * (1 - x)
 
     @staticmethod
     def relu(x):
-        return x if x > 0 else 0.0
+        return np.where(x > 0, x, 0.0)
 
     @staticmethod
     def relu_diff(x):
-        return 1.0 if x > 0 else 0.0
+        return np.where(x > 0, 1.0, 0.0)
 
     @staticmethod
     def identity(x):
@@ -194,11 +194,11 @@ class DNN(Model):
 
     @staticmethod
     def identity_diff(x):
-        return 1.0
+        return np.ones(x.shape)
 
     @staticmethod
     def tanh(x):
-        exp = 2 * min(x, 1e2)
+        exp = 2 * np.where(x > 1e2, 1e2, x)
         return (np.power(np.e, exp) - 1) / (np.power(np.e, exp) + 1)
 
     @staticmethod
