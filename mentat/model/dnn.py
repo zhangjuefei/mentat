@@ -175,13 +175,13 @@ class DNN(Model):
     def sigmoid(x):
         return 1.0 / (1.0 + np.power(np.e, np.where(-x > 1e2, 1e2, -x)))
 
-
     @staticmethod
     def sigmoid_diff(x):
         return x * (1 - x)
 
     @staticmethod
     def relu(x):
+        # return x if x > 0 else 0.0
         return np.where(x > 0, x, 0.0)
 
     @staticmethod
