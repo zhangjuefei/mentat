@@ -8,7 +8,6 @@ not a comfortable hammock in which we can lie down to be waited upon by our robo
 </pre>
 </br>
 ![dnn train animation](https://raw.githubusercontent.com/zhangjuefei/mentat/master/mentat/test/pic/dnn_animation.gif)
-</br>
 Example:
 </br>
 
