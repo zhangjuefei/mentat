@@ -135,7 +135,7 @@ anim = animation.FuncAnimation(fig, update, init_func=init, frames=max_epochs, i
 
 # anim.save('dnn_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
 # plt.rcParams['animation.convert_path'] = 'C:\Program Files\ImageMagick-6.9.0-Q16\convert.exe'
-anim.save('pic/dnn_animation.gif', writer='imagemagick')
+anim.save('dnn_animation.gif', writer='imagemagick')
 # anim.save('dnn_animation_html/dnn_animation.html')
 
 # plt.show()
