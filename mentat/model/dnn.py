@@ -47,6 +47,7 @@ class DNN(Model):
         self.decay_power = self.pv("decay_power", decay_power)
         self.iterations = 0
         self.epochs = 0
+        self.epoch_loss = []
 
         self.activations = self.pv("activations", activations)
         self.activation_func = []
@@ -86,7 +87,7 @@ class DNN(Model):
             self.outputs[idx] = result
             al = self.weights[idx] * result + self.biases[idx]
             self.activity_levels[idx] = al
-            result = self.activation_func[idx](al)
+            result = np.mat(self.activation_func[idx](al))
 
         self.outputs[self.depth] = result
         return self.softmax(result) if self.is_softmax else result
@@ -131,6 +132,7 @@ class DNN(Model):
         x = np.mat(features)
         y = np.mat(response)
         loss = []
+        self.epoch_loss = []
         self.iterations = 0
         self.epochs = 0
         start = 0
@@ -162,6 +164,7 @@ class DNN(Model):
             if self.iterations % train_set_size == 0:
                 self.epochs += 1
                 mean_e = np.mean(loss)
+                self.epoch_loss.append(mean_e)
                 loss = []
 
                 if self.verbose:
@@ -177,7 +180,7 @@ class DNN(Model):
 
     @staticmethod
     def sigmoid_diff(x):
-        return x * (1 - x)
+        return np.multiply(x, (1 - x))
 
     @staticmethod
     def relu(x):
@@ -203,7 +206,7 @@ class DNN(Model):
 
     @staticmethod
     def tanh_diff(x):
-        return 1 - x * x
+        return 1 - np.multiply(x, x)
 
     @staticmethod
     def softmax(x):
