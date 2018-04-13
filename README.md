@@ -7,7 +7,7 @@ not a comfortable hammock in which we can lie down to be waited upon by our robo
                                                 -- Norbert Wiener “The Human Use Of Human Beings”
 </pre>
 </br>
-![dnn train animation](https://raw.githubusercontent.com/zhangjuefei/mentat/master/mentat/test/pic/dnn_animation.gif)
+![animation](mentat/test/pic/dnn_animation.gif)
 Example:
 </br>
 
