@@ -46,9 +46,9 @@ dnn = DNN(input_shape=2, shape=[hidden_neurons, 2], activations=["sigmoid", "ide
 evaluator = ClassificationEvaluator()
 
 # loss
-loss = [1.0]
-train_accuracy = [0.5]
-test_accuracy = [0.5]
+loss = []
+train_accuracy = []
+test_accuracy = []
 
 
 def draw(idx):
@@ -66,6 +66,11 @@ def draw(idx):
     train_accuracy.append(evaluator.fit(train_predict).metrics["accuracy"])
     test_accuracy.append(evaluator.fit(test_predict).metrics["accuracy"])
     loss.append(dnn.epoch_loss[-1])
+
+    if idx == 0:
+        train_accuracy.append(train_accuracy[0])
+        test_accuracy.append(test_accuracy[0])
+        loss.append(loss[0])
 
     probability = dnn.predict(np.c_[xx.ravel(), yy.ravel()])[:, 0].reshape(xx.shape)
 
