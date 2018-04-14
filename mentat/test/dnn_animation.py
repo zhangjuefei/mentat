@@ -31,10 +31,10 @@ points = StandardScaler().fit_evaluate(
     ZDataFrame(pd.DataFrame(np.c_[X, y], columns=["x", "y", "z"]), response_column="z",
                response_encode="multiclass").impute("mean"))
 
-x_min = points.data.describe().loc["min", "x"] - 0.5
-x_max = points.data.describe().loc["max", "x"] + 0.5
-y_min = points.data.describe().loc["min", "y"] - 0.5
-y_max = points.data.describe().loc["max", "y"] + 0.5
+x_min = points().describe().loc["min", "x"] - 0.5
+x_max = points().describe().loc["max", "x"] + 0.5
+y_min = points().describe().loc["min", "y"] - 0.5
+y_max = points().describe().loc["max", "y"] + 0.5
 xx, yy = np.meshgrid(np.arange(x_min, x_max, .02), np.arange(y_min, y_max, .02))
 
 train, test = points.split(0.7)
@@ -53,8 +53,8 @@ test_accuracy = []
 def draw(idx):
     print("epochs: {:d}".format(idx))
     bottom = -.5
-    c_train = 1 - train.data["z"]
-    c_test = 1 - test.data["z"]
+    c_train = 1 - train()["z"]
+    c_test = 1 - test()["z"]
 
     dnn.fit(train)
     train_predict = dnn.evaluate(train)
@@ -76,9 +76,9 @@ def draw(idx):
     axes[0].set_title(r"$probability\ surface$", fontsize=8)
     axes[0].plot_surface(xx, yy, probability, rstride=1, cstride=1, alpha=0.6, cmap=cm)
     axes[0].contourf(xx, yy, probability, zdir='z', offset=bottom, alpha=0.6, cmap=cm)
-    axes[0].scatter(train.data["x"], train.data["y"], bottom, c=c_train, cmap=cm_bright, edgecolors='k',
+    axes[0].scatter(train()["x"], train()["y"], bottom, c=c_train, cmap=cm_bright, edgecolors='k',
                     s=10)
-    axes[0].scatter(test.data["x"], test.data["y"], bottom, c=c_test, cmap=cm_bright, edgecolors='k',
+    axes[0].scatter(test()["x"], test()["y"], bottom, c=c_test, cmap=cm_bright, edgecolors='k',
                     alpha=0.5, s=10)
     axes[0].set_xlim(xx.min(), xx.max())
     axes[0].set_ylim(yy.min(), yy.max())
@@ -89,8 +89,8 @@ def draw(idx):
 
     axes[1].clear()
     axes[1].set_title(r"$epochs: {:d}/{:d}$".format(idx, max_epochs), fontsize=8)
-    axes[1].scatter(train.data["x"], train.data["y"], c=c_train, cmap=cm_bright, edgecolors='k', s=10)
-    axes[1].scatter(test.data["x"], test.data["y"], c=c_test, cmap=cm_bright, edgecolors='k', alpha=0.5,
+    axes[1].scatter(train()["x"], train()["y"], c=c_train, cmap=cm_bright, edgecolors='k', s=10)
+    axes[1].scatter(test()["x"], test()["y"], c=c_test, cmap=cm_bright, edgecolors='k', alpha=0.5,
                     s=10)
     axes[1].contourf(xx, yy, probability, cmap=cm, alpha=.6)
     axes[1].set_xlim(xx.min(), xx.max())
@@ -106,7 +106,7 @@ def draw(idx):
                     c=c_train,
                     cmap=cm_bright, edgecolors="k", s=10)
     axes[2].scatter(hidden_outputs_test[:, 0], hidden_outputs_test[:, 1], hidden_outputs_test[:, 2],
-                    c=1 - test.data["z"],
+                    c=c_test,
                     cmap=cm_bright, edgecolors="k", alpha=0.6, s=10)
     axes[2].set_xlabel(r"$1st\ neuron$", fontsize=8)
     axes[2].set_ylabel(r"$2nd\ neuron$", fontsize=8)
