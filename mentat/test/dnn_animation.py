@@ -122,7 +122,7 @@ def draw(idx):
     axes[3].plot(train_accuracy, linewidth=1)
     axes[3].plot(test_accuracy, linewidth=1)
     axes[3].set_ylim([0, 1])
-    axes[3].set_xlim([0, len(loss) if len(loss) else 1])
+    axes[3].set_xlim([0, len(loss)-1 if len(loss) else 0])
     axes[3].legend(["loss ({:.3f})".format(current_loss), "accuracy train ({:.3f})".format(train_acc),
                     "accuracy test ({:.3f})".format(test_acc)], loc="lower left", fontsize=8)
     axes[3].set_xlabel(r"$epochs$", fontsize=8)
