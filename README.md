@@ -6,8 +6,9 @@ not a comfortable hammock in which we can lie down to be waited upon by our robo
 
                                                 -- Norbert Wiener “The Human Use Of Human Beings”
 </pre>
-</br>
+
 ![animation](mentat/test/pic/dnn_animation.gif)
+
 </br>
 Example:
 </br>
