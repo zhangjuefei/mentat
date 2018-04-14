@@ -11,7 +11,7 @@ from mentat.evaluator import ClassificationEvaluator
 from mentat.model import DNN
 from mentat.preprocessor import StandardScaler
 
-max_epochs = 40
+max_epochs = 30
 hidden_neurons = 3
 
 cm = plt.cm.coolwarm
@@ -24,6 +24,7 @@ axes.append(fig.add_subplot(2, 2, 1, projection="3d"))
 axes.append(fig.add_subplot(2, 2, 2))
 axes.append(fig.add_subplot(2, 2, 3, projection="3d"))
 axes.append(fig.add_subplot(2, 2, 4))
+fig.subplots_adjust(left=0.05, bottom=0.05, right=0.95, top=0.95, wspace=0.2, hspace=0.2)
 
 # data points
 X, y = make_circles(n_samples=120, noise=0.24, factor=0.2, random_state=42)
@@ -45,9 +46,9 @@ dnn = DNN(input_shape=2, shape=[hidden_neurons, 2], activations=["sigmoid", "ide
 evaluator = ClassificationEvaluator()
 
 # loss
-loss = []
-train_accuracy = []
-test_accuracy = []
+loss = [1.0]
+train_accuracy = [0.5]
+test_accuracy = [0.5]
 
 
 def draw(idx):
