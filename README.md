@@ -7,7 +7,7 @@ not a comfortable hammock in which we can lie down to be waited upon by our robo
                                                 -- Norbert Wiener “The Human Use Of Human Beings”
 </pre>
 
-#### [Graph illustrating the training of a ANN](https://raw.githubusercontent.com/zhangjuefei/mentat/master/mentat/test/dnn_animation.py)
+#### [Illustration of the training process of a ANN](https://raw.githubusercontent.com/zhangjuefei/mentat/master/mentat/test/dnn_animation.py)
 
 
 ![animation](https://raw.githubusercontent.com/zhangjuefei/mentat/master/mentat/test/pic/dnn_animation.gif)
