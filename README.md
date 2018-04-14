@@ -8,6 +8,7 @@ not a comfortable hammock in which we can lie down to be waited upon by our robo
 </pre>
 
 ![animation](https://raw.githubusercontent.com/zhangjuefei/mentat/master/mentat/test/pic/dnn_animation.gif)
+</br>
 Code for this graph: [code](https://raw.githubusercontent.com/zhangjuefei/mentat/master/mentat/test/dnn_animation.py)
 
 </br>
