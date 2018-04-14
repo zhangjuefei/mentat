@@ -11,7 +11,7 @@ from mentat.evaluator import ClassificationEvaluator
 from mentat.model import DNN
 from mentat.preprocessor import StandardScaler
 
-max_epochs = 30
+max_epochs = 40
 hidden_neurons = 3
 
 cm = plt.cm.coolwarm
