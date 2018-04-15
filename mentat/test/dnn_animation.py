@@ -43,7 +43,7 @@ train, test = points.split(0.7)
 
 # neural network
 dnn = DNN(input_shape=2, shape=[hidden_neurons, 2], activations=["sigmoid", "identity"], eta=0.2, softmax=True,
-          max_epochs=1, minibatch_size=20, verbose=False, decay_power=0.2, regularization=1e-4)
+          max_epochs=1, minibatch_size=20, verbose=False, decay_power=0.2, regularization=5e-4)
 evaluator = ClassificationEvaluator()
 
 # loss
@@ -129,14 +129,14 @@ def draw(idx):
     axes[2].scatter(hidden_outputs_test[:, 0], hidden_outputs_test[:, 1], hidden_outputs_test[:, 2],
                     c=c_test,
                     cmap=cm_bright, edgecolors="k", alpha=0.6, s=10)
-    axes[2].plot_surface(xxx, yyy, zzz, rstride=1, cstride=1, alpha=0.5, cmap=blues, vmin=0.0, vmax=1.0)
+    axes[2].plot_surface(xxx, yyy, zzz, rstride=1, cstride=1, alpha=0.3, color="y", vmin=0.0, vmax=1.0)
     axes[2].set_xlabel(r"$1st\ neuron$", fontsize=8)
     axes[2].set_ylabel(r"$2nd\ neuron$", fontsize=8)
     axes[2].set_zlabel(r"$3rd\ neuron$", fontsize=8)
     axes[2].tick_params(labelsize=8)
-    axes[2].set_xlim([0.0, 1.0])
-    axes[2].set_ylim([0.0, 1.0])
-    axes[2].set_zlim([0.0, 1.0])
+    # axes[2].set_xlim([-1.0, 1.0])
+    # axes[2].set_ylim([-1.0, 1.0])
+    # axes[2].set_zlim([-1.0, 1.0])
     axes[2].view_init(40, -30)
     axes[2].grid()
 
@@ -166,5 +166,5 @@ def update(idx):
     draw(idx + 1)
 
 
-anim = animation.FuncAnimation(fig, update, init_func=init, frames=max_epochs, interval=220, blit=False)
+anim = animation.FuncAnimation(fig, update, init_func=init, frames=max_epochs, interval=200, blit=False)
 anim.save('dnn_animation.gif', writer='imagemagick')
