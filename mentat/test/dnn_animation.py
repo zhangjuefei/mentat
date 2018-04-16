@@ -11,7 +11,7 @@ from mentat.evaluator import ClassificationEvaluator
 from mentat.model import DNN
 from mentat.preprocessor import StandardScaler
 
-max_epochs = 30
+max_epochs = 50
 hidden_neurons = 3
 
 cm = plt.cm.coolwarm
@@ -29,6 +29,7 @@ fig.subplots_adjust(left=0.05, bottom=0.05, right=0.95, top=0.95, wspace=0.2, hs
 
 # data points
 X, y = make_circles(n_samples=120, noise=0.2, factor=0.3, random_state=42)
+X, y = make_moons(n_samples=120, noise=0.1, random_state=42)
 points = StandardScaler().fit_evaluate(
     ZDataFrame(pd.DataFrame(np.c_[X, y], columns=["x", "y", "z"]), response_column="z",
                response_encode="multiclass").impute("mean"))
@@ -42,8 +43,8 @@ xx, yy = np.meshgrid(np.arange(x_min, x_max, .02), np.arange(y_min, y_max, .02))
 train, test = points.split(0.7)
 
 # neural network
-dnn = DNN(input_shape=2, shape=[hidden_neurons, 2], activations=["sigmoid", "identity"], eta=0.2, softmax=True,
-          max_epochs=1, minibatch_size=20, verbose=False, decay_power=0.2, regularization=2e-4)
+dnn = DNN(input_shape=2, shape=[hidden_neurons, 2], activations=["sigmoid", "identity"], eta=0.3, softmax=True,
+          max_epochs=1, minibatch_size=20, verbose=False, decay_power=0.2, regularization=1e-4)
 evaluator = ClassificationEvaluator()
 
 # loss
@@ -82,10 +83,10 @@ def draw(idx):
         loss.append(dnn.epoch_loss[-1])
     else:
         prob = dnn.predict(train.features())
-        first_loss = np.mean(-np.sum(np.multiply(train.response(), np.log(prob + 1e-1000)), axis=0))
+        first_loss = np.mean(-np.sum(np.multiply(train.response(), np.log(prob + 1e-1000)), axis=1))
         loss.append(first_loss)
 
-    print("LOSS: {:.3f}".format(loss[-1]))
+    print("loss: {:.3f}".format(loss[-1]))
 
     probability = dnn.predict(np.c_[xx.ravel(), yy.ravel()])[:, 0].reshape(xx.shape)
 
