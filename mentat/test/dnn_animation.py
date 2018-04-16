@@ -11,7 +11,7 @@ from mentat.evaluator import ClassificationEvaluator
 from mentat.model import DNN
 from mentat.preprocessor import StandardScaler
 
-max_epochs = 40
+max_epochs = 30
 hidden_neurons = 3
 
 cm = plt.cm.coolwarm
@@ -110,7 +110,7 @@ def draw(idx):
     axes[0].view_init(40, -30)
 
     axes[1].clear()
-    axes[1].set_title(r"$epochs: {:d}/{:d}$".format(idx, max_epochs), fontsize=8)
+    axes[1].set_title(r"$epochs: {:02d}/{:02d}$".format(idx, max_epochs), fontsize=8)
     axes[1].scatter(train()["x"], train()["y"], c=c_train, cmap=cm_bright, edgecolors='k', s=10)
     axes[1].scatter(test()["x"], test()["y"], c=c_test, cmap=cm_bright, edgecolors='k', alpha=0.5,
                     s=10)
@@ -130,7 +130,7 @@ def draw(idx):
     axes[2].scatter(hidden_outputs_test[:, 0], hidden_outputs_test[:, 1], hidden_outputs_test[:, 2],
                     c=c_test,
                     cmap=cm_bright, edgecolors="k", alpha=0.6, s=10)
-    axes[2].plot_surface(xxx, yyy, zzz, rstride=1, cstride=1, alpha=0.3, cmap=blues, vmin=0.0, vmax=1.0)
+    axes[2].plot_surface(xxx, yyy, zzz, rstride=1, cstride=1, alpha=0.6, cmap=blues, vmin=0.0, vmax=1.0)
     axes[2].set_xlabel(r"$1st\ neuron$", fontsize=8)
     axes[2].set_ylabel(r"$2nd\ neuron$", fontsize=8)
     axes[2].set_zlabel(r"$3rd\ neuron$", fontsize=8)
