@@ -11,7 +11,7 @@ from mentat.evaluator import ClassificationEvaluator
 from mentat.model import DNN
 from mentat.preprocessor import StandardScaler
 
-max_epochs = 50
+max_epochs = 60
 hidden_neurons = 3
 
 cm = plt.cm.coolwarm
@@ -28,7 +28,6 @@ axes.append(fig.add_subplot(2, 2, 4))
 fig.subplots_adjust(left=0.05, bottom=0.05, right=0.95, top=0.95, wspace=0.2, hspace=0.2)
 
 # data points
-X, y = make_circles(n_samples=120, noise=0.2, factor=0.3, random_state=42)
 X, y = make_moons(n_samples=120, noise=0.1, random_state=42)
 points = StandardScaler().fit_evaluate(
     ZDataFrame(pd.DataFrame(np.c_[X, y], columns=["x", "y", "z"]), response_column="z",
