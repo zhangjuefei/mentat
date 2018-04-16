@@ -28,7 +28,7 @@ axes.append(fig.add_subplot(2, 2, 4))
 fig.subplots_adjust(left=0.05, bottom=0.05, right=0.95, top=0.95, wspace=0.2, hspace=0.2)
 
 # data points
-X, y = make_circles(n_samples=100, noise=0.24, factor=0.2, random_state=42)
+X, y = make_circles(n_samples=120, noise=0.25, factor=0.3, random_state=42)
 points = StandardScaler().fit_evaluate(
     ZDataFrame(pd.DataFrame(np.c_[X, y], columns=["x", "y", "z"]), response_column="z",
                response_encode="multiclass").impute("mean"))
@@ -43,7 +43,7 @@ train, test = points.split(0.7)
 
 # neural network
 dnn = DNN(input_shape=2, shape=[hidden_neurons, 2], activations=["sigmoid", "identity"], eta=0.2, softmax=True,
-          max_epochs=1, minibatch_size=20, verbose=False, decay_power=0.2, regularization=5e-4)
+          max_epochs=1, minibatch_size=20, verbose=False, decay_power=0.2, regularization=2e-4)
 evaluator = ClassificationEvaluator()
 
 # loss
@@ -73,6 +73,7 @@ def draw(idx):
     yyy_range = (yyy_max - yyy_min) / 100
     xxx, yyy = np.meshgrid(np.arange(xxx_min, xxx_max, xxx_range), np.arange(yyy_min, yyy_max, yyy_range))
     zzz = -w[0] / w[2] * xxx - w[1] / w[2] * yyy - b/w[2]
+    zzz = np.where(zzz < 0.0, 0.0, zzz)
 
     train_accuracy.append(evaluator.fit(train_predict).metrics["accuracy"])
     test_accuracy.append(evaluator.fit(test_predict).metrics["accuracy"])
@@ -129,14 +130,14 @@ def draw(idx):
     axes[2].scatter(hidden_outputs_test[:, 0], hidden_outputs_test[:, 1], hidden_outputs_test[:, 2],
                     c=c_test,
                     cmap=cm_bright, edgecolors="k", alpha=0.6, s=10)
-    axes[2].plot_surface(xxx, yyy, zzz, rstride=1, cstride=1, alpha=0.3, color="y", vmin=0.0, vmax=1.0)
+    axes[2].plot_surface(xxx, yyy, zzz, rstride=1, cstride=1, alpha=0.3, cmap=blues, vmin=0.0, vmax=1.0)
     axes[2].set_xlabel(r"$1st\ neuron$", fontsize=8)
     axes[2].set_ylabel(r"$2nd\ neuron$", fontsize=8)
     axes[2].set_zlabel(r"$3rd\ neuron$", fontsize=8)
     axes[2].tick_params(labelsize=8)
-    # axes[2].set_xlim([-1.0, 1.0])
-    # axes[2].set_ylim([-1.0, 1.0])
-    # axes[2].set_zlim([-1.0, 1.0])
+    axes[2].set_xlim([0.0, 1.0])
+    axes[2].set_ylim([0.0, 1.0])
+    axes[2].set_zlim(bottom=0)
     axes[2].view_init(40, -30)
     axes[2].grid()
 
