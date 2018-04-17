@@ -4,7 +4,7 @@ from matplotlib import animation
 from matplotlib import pyplot as plt
 from matplotlib.colors import ListedColormap
 from mpl_toolkits.mplot3d import Axes3D
-from sklearn.datasets import make_circles, make_moons
+from sklearn.datasets import make_circles
 
 from mentat import ZDataFrame
 from mentat.evaluator import ClassificationEvaluator
@@ -19,6 +19,7 @@ blues = plt.cm.Blues
 cm_bright = ListedColormap(["#0000FF", "#FF0000"])
 
 # figure axes
+axes3d = Axes3D()  # no use
 axes = []
 fig = plt.figure(figsize=(8, 8))
 axes.append(fig.add_subplot(2, 2, 1, projection="3d"))
@@ -63,7 +64,7 @@ def draw(idx):
     test_predict = dnn.evaluate(test)
     hidden_outputs_test = dnn.outputs[dnn.depth - 1].transpose().A
 
-    w = (dnn.weights[dnn.depth - 1][0,:] - dnn.weights[dnn.depth - 1][1,:]).A1
+    w = (dnn.weights[dnn.depth - 1][0, :] - dnn.weights[dnn.depth - 1][1, :]).A1
     b = (dnn.biases[dnn.depth - 1][0, :] - dnn.biases[dnn.depth - 1][1, :])[0][0]
     xxx_min = min(np.min(hidden_outputs_train[:, 0]), np.min(hidden_outputs_test[:, 0]))
     xxx_max = max(np.max(hidden_outputs_train[:, 0]), np.max(hidden_outputs_test[:, 0]))
@@ -72,7 +73,7 @@ def draw(idx):
     xxx_range = (xxx_max - xxx_min) / 100
     yyy_range = (yyy_max - yyy_min) / 100
     xxx, yyy = np.meshgrid(np.arange(xxx_min, xxx_max, xxx_range), np.arange(yyy_min, yyy_max, yyy_range))
-    zzz = -w[0] / w[2] * xxx - w[1] / w[2] * yyy - b/w[2]
+    zzz = -w[0] / w[2] * xxx - w[1] / w[2] * yyy - b / w[2]
     zzz = np.where(zzz < 0.0, 0.0, zzz)
 
     train_accuracy.append(evaluator.fit(train_predict).metrics["accuracy"])
@@ -148,7 +149,7 @@ def draw(idx):
     axes[3].plot(train_accuracy, linewidth=1)
     axes[3].plot(test_accuracy, linewidth=1)
     axes[3].set_ylim([0, 1.1])
-    axes[3].set_xlim([0, len(loss)-1 if len(loss) > 1 else 1])
+    axes[3].set_xlim([0, len(loss) - 1 if len(loss) > 1 else 1])
     axes[3].legend(["loss ({:.3f})".format(current_loss), "accuracy train ({:.3f})".format(train_acc),
                     "accuracy test ({:.3f})".format(test_acc)], loc="lower left", fontsize=8)
     axes[3].set_xlabel(r"$epochs$", fontsize=8)
