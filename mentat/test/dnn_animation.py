@@ -11,7 +11,7 @@ from mentat.evaluator import ClassificationEvaluator
 from mentat.model import DNN
 from mentat.preprocessor import StandardScaler
 
-max_epochs = 30
+max_epochs = 40
 hidden_neurons = 3
 
 cm = plt.cm.coolwarm
@@ -19,7 +19,6 @@ blues = plt.cm.Blues
 cm_bright = ListedColormap(["#0000FF", "#FF0000"])
 
 # figure axes
-axes3d = Axes3D()  # no use
 axes = []
 fig = plt.figure(figsize=(8, 8))
 axes.append(fig.add_subplot(2, 2, 1, projection="3d"))
@@ -64,6 +63,7 @@ def draw(idx):
     test_predict = dnn.evaluate(test)
     hidden_outputs_test = dnn.outputs[dnn.depth - 1].transpose().A
 
+    wh = dnn.weights[0]  # hidden layer weights matrix
     w = (dnn.weights[dnn.depth - 1][0, :] - dnn.weights[dnn.depth - 1][1, :]).A1
     b = (dnn.biases[dnn.depth - 1][0, :] - dnn.biases[dnn.depth - 1][1, :])[0][0]
     xxx_min = min(np.min(hidden_outputs_train[:, 0]), np.min(hidden_outputs_test[:, 0]))
@@ -116,6 +116,15 @@ def draw(idx):
     axes[1].scatter(test()["x"], test()["y"], c=c_test, cmap=cm_bright, edgecolors='k', alpha=0.5,
                     s=10)
     axes[1].contourf(xx, yy, probability, cmap=cm, alpha=.6)
+    axes[1].arrow(0, 0, wh[0, 0] / np.linalg.norm(wh[0]), wh[0, 1] / np.linalg.norm(wh[0]), head_width=0.06,
+                  head_length=0.1, fc='#666666', ec='#666666')
+    axes[1].arrow(0, 0, wh[1, 0] / np.linalg.norm(wh[1]), wh[1, 1] / np.linalg.norm(wh[1]), head_width=0.06,
+                  head_length=0.1, fc='#666666', ec='#666666')
+    axes[1].arrow(0, 0, wh[2, 0] / np.linalg.norm(wh[2]), wh[2, 1] / np.linalg.norm(wh[2]), head_width=0.06,
+                  head_length=0.1, fc='#666666', ec='#666666')
+    axes[1].text(wh[0, 0] / np.linalg.norm(wh[0]) + .05, wh[0, 1] / np.linalg.norm(wh[0]) + .05, r"$neuron\ 1$", fontsize=6)
+    axes[1].text(wh[1, 0] / np.linalg.norm(wh[1]) + .05, wh[1, 1] / np.linalg.norm(wh[1]) + .05, r"$neuron\ 2$", fontsize=6)
+    axes[1].text(wh[2, 0] / np.linalg.norm(wh[2]) + .05, wh[2, 1] / np.linalg.norm(wh[2]) + .05, r"$neuron\ 3$", fontsize=6)
     axes[1].set_xlim(xx.min(), xx.max())
     axes[1].set_ylim(yy.min(), yy.max())
     axes[1].set_xlabel(r"$x_1$", fontsize=8)
