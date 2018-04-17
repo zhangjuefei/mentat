@@ -15,7 +15,8 @@ class Model(Operator):
         predict = self.predict(data.features())
 
         if data.response_encode:
-            predict_category = pd.DataFrame(data.reverse_response(predict), columns=["predict_category"], index=data.data.index.copy())
+            predict_category = pd.DataFrame(data.reverse_response(predict), columns=["predict_category"],
+                                            index=data.data.index.copy())
             predict_prob = pd.DataFrame(predict, columns=data.category, index=data.data.index.copy())
             model_output = pd.merge(predict_category, predict_prob, left_index=True, right_index=True)
         else:

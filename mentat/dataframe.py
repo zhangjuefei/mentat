@@ -1,7 +1,7 @@
 import numpy as np
 from pandas import DataFrame as PDataFrame
 
-from .exception import UnSupportException, ParameterException
+from .exception import UnSupportException
 from .util import ParamValidator
 
 

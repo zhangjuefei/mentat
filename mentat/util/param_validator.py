@@ -52,18 +52,18 @@ class ParamValidator:
 
             if spec.get("range"):
 
-                range = spec.get("range")
+                v_range = spec.get("range")
 
-                if isinstance(range, tuple):
-                    min_value, max_value = spec.get("range")
+                if isinstance(v_range, tuple):
+                    min_value, max_value = v_range
 
                     if value < min_value or value > max_value:
                         raise ParameterException(
                             "parameter \"{:s}\" must be in [{:f}, {:f}]".format(name, min_value, max_value))
-                elif isinstance(range, list):
-                    if value not in range:
+                elif isinstance(v_range, list):
+                    if value not in v_range:
                         raise ParameterException(
-                            "parameter \"{:s}\" must be in {{:s}{".format(name, ", ".join(range)))
+                            "parameter \"{:s}\" must be in {{:s}{".format(name, ", ".join(v_range)))
 
         return value
 
