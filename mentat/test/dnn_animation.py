@@ -42,8 +42,8 @@ xx, yy = np.meshgrid(np.arange(x_min, x_max, .02), np.arange(y_min, y_max, .02))
 train, test = points.split(0.7)
 
 # neural network
-dnn = DNN(input_shape=2, shape=[hidden_neurons, 2], activations=["sigmoid", "identity"], eta=0.2, softmax=True,
-          max_epochs=1, minibatch_size=20, verbose=False, decay_power=0.2, regularization=1e-4)
+dnn = DNN(input_shape=2, shape=[hidden_neurons, 2], activations=["sigmoid", "identity"], eta=0.15, softmax=True,
+          max_epochs=1, minibatch_size=20, verbose=False, decay_power=0.2, regularization=1e-3)
 evaluator = ClassificationEvaluator()
 
 # loss
