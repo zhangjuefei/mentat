@@ -112,16 +112,16 @@ def draw(idx):
 
     axes[1].clear()
     axes[1].set_title(r"$epochs: {:02d}/{:02d}$".format(idx, max_epochs), fontsize=8)
+    axes[1].contourf(xx, yy, probability, cmap=cm, alpha=.6)
     axes[1].scatter(train()["x"], train()["y"], c=c_train, cmap=cm_bright, edgecolors='k', s=10)
     axes[1].scatter(test()["x"], test()["y"], c=c_test, cmap=cm_bright, edgecolors='k', alpha=0.5,
                     s=10)
-    axes[1].contourf(xx, yy, probability, cmap=cm, alpha=.6)
     axes[1].arrow(0, 0, wh[0, 0] / np.linalg.norm(wh[0]), wh[0, 1] / np.linalg.norm(wh[0]), head_width=0.06,
-                  head_length=0.1, fc='#666666', ec='#666666')
+                  head_length=0.1, fc='#555555', ec='#555555')
     axes[1].arrow(0, 0, wh[1, 0] / np.linalg.norm(wh[1]), wh[1, 1] / np.linalg.norm(wh[1]), head_width=0.06,
-                  head_length=0.1, fc='#666666', ec='#666666')
+                  head_length=0.1, fc='#555555', ec='#555555')
     axes[1].arrow(0, 0, wh[2, 0] / np.linalg.norm(wh[2]), wh[2, 1] / np.linalg.norm(wh[2]), head_width=0.06,
-                  head_length=0.1, fc='#666666', ec='#666666')
+                  head_length=0.1, fc='#555555', ec='#555555')
     axes[1].text(wh[0, 0] / np.linalg.norm(wh[0]) + .05, wh[0, 1] / np.linalg.norm(wh[0]) + .05, r"$neuron\ 1$", fontsize=6)
     axes[1].text(wh[1, 0] / np.linalg.norm(wh[1]) + .05, wh[1, 1] / np.linalg.norm(wh[1]) + .05, r"$neuron\ 2$", fontsize=6)
     axes[1].text(wh[2, 0] / np.linalg.norm(wh[2]) + .05, wh[2, 1] / np.linalg.norm(wh[2]) + .05, r"$neuron\ 3$", fontsize=6)
