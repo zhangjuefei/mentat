@@ -11,11 +11,12 @@ from mentat.evaluator import ClassificationEvaluator
 from mentat.model import DNN
 from mentat.preprocessor import StandardScaler
 
-max_epochs = 40
+max_epochs = 36
 hidden_neurons = 3
 
 cm = plt.cm.coolwarm
 blues = plt.cm.Blues
+greens = plt.cm.Greens
 cm_bright = ListedColormap(["#0000FF", "#FF0000"])
 
 # figure axes
@@ -125,9 +126,9 @@ def draw(idx):
                   head_length=0.1, fc='#555555', ec='#555555')
     axes[1].arrow(0, 0, wh[2, 0] / np.linalg.norm(wh[2]), wh[2, 1] / np.linalg.norm(wh[2]), head_width=0.06,
                   head_length=0.1, fc='#555555', ec='#555555')
-    axes[1].text(wh[0, 0] / np.linalg.norm(wh[0]) + .05, wh[0, 1] / np.linalg.norm(wh[0]) + .05, r"$neuron\ 1$", fontsize=6)
-    axes[1].text(wh[1, 0] / np.linalg.norm(wh[1]) + .05, wh[1, 1] / np.linalg.norm(wh[1]) + .05, r"$neuron\ 2$", fontsize=6)
-    axes[1].text(wh[2, 0] / np.linalg.norm(wh[2]) + .05, wh[2, 1] / np.linalg.norm(wh[2]) + .05, r"$neuron\ 3$", fontsize=6)
+    axes[1].text(wh[0, 0] / np.linalg.norm(wh[0]) + .05, wh[0, 1] / np.linalg.norm(wh[0]) + .05, r"$1$", fontsize=8)
+    axes[1].text(wh[1, 0] / np.linalg.norm(wh[1]) + .05, wh[1, 1] / np.linalg.norm(wh[1]) + .05, r"$2$", fontsize=8)
+    axes[1].text(wh[2, 0] / np.linalg.norm(wh[2]) + .05, wh[2, 1] / np.linalg.norm(wh[2]) + .05, r"$3$", fontsize=8)
     axes[1].set_xlim(xx.min(), xx.max())
     axes[1].set_ylim(yy.min(), yy.max())
     axes[1].set_xlabel(r"$x_1$", fontsize=8)
@@ -144,7 +145,7 @@ def draw(idx):
                     c=c_test,
                     cmap=cm_bright, edgecolors="k", alpha=0.6, s=11)
     if len(zzz) >= 3:
-        axes[2].plot_trisurf(xxx.ravel(), yyy.ravel(), zzz.ravel(), linewidth=0.2, antialiased=True, alpha=0.5, cmap=blues)
+        axes[2].plot_trisurf(xxx.ravel(), yyy.ravel(), zzz.ravel(), antialiased=True, alpha=0.4, cmap=greens)
 
     axes[2].set_xlabel(r"$1st\ neuron$", fontsize=8)
     axes[2].set_ylabel(r"$2nd\ neuron$", fontsize=8)
