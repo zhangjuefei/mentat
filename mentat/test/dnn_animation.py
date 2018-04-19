@@ -73,8 +73,11 @@ def draw(idx):
     xxx_range = (xxx_max - xxx_min) / 100
     yyy_range = (yyy_max - yyy_min) / 100
     xxx, yyy = np.meshgrid(np.arange(xxx_min, xxx_max, xxx_range), np.arange(yyy_min, yyy_max, yyy_range))
-    zzz = -w[0] / w[2] * xxx - w[1] / w[2] * yyy - b / w[2]
-    zzz = np.where(zzz < 0.0, 0.0, zzz)
+    zzz = (-w[0] / w[2] * xxx - w[1] / w[2] * yyy - b / w[2]).A
+    need = (zzz >= 0) & (zzz <= 1)
+    xxx = xxx[need].ravel()
+    yyy = yyy[need].ravel()
+    zzz = zzz[need].ravel()
 
     train_accuracy.append(evaluator.fit(train_predict).metrics["accuracy"])
     test_accuracy.append(evaluator.fit(test_predict).metrics["accuracy"])
@@ -140,14 +143,16 @@ def draw(idx):
     axes[2].scatter(hidden_outputs_test[:, 0], hidden_outputs_test[:, 1], hidden_outputs_test[:, 2],
                     c=c_test,
                     cmap=cm_bright, edgecolors="k", alpha=0.6, s=11)
-    axes[2].plot_surface(xxx, yyy, zzz, rstride=1, cstride=1, alpha=0.6, cmap=blues, vmin=0.0, vmax=1.0)
+    if len(zzz) >= 3:
+        axes[2].plot_trisurf(xxx.ravel(), yyy.ravel(), zzz.ravel(), linewidth=0.2, antialiased=True, alpha=0.5, cmap=blues)
+
     axes[2].set_xlabel(r"$1st\ neuron$", fontsize=8)
     axes[2].set_ylabel(r"$2nd\ neuron$", fontsize=8)
     axes[2].set_zlabel(r"$3rd\ neuron$", fontsize=8)
     axes[2].tick_params(labelsize=8)
     axes[2].set_xlim([0.0, 1.0])
     axes[2].set_ylim([0.0, 1.0])
-    axes[2].set_zlim(bottom=0)
+    axes[2].set_zlim([0.0, 1.0])
     axes[2].view_init(40, -30)
     axes[2].grid()
 
