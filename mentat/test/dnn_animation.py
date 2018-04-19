@@ -99,9 +99,9 @@ def draw(idx):
     axes[0].plot_surface(xx, yy, probability, rstride=1, cstride=1, alpha=0.6, cmap=cm)
     axes[0].contourf(xx, yy, probability, zdir='z', offset=bottom, alpha=0.6, cmap=cm)
     axes[0].scatter(train()["x"], train()["y"], bottom, c=c_train, cmap=cm_bright, edgecolors='k',
-                    s=10)
+                    s=11)
     axes[0].scatter(test()["x"], test()["y"], bottom, c=c_test, cmap=cm_bright, edgecolors='k',
-                    alpha=0.5, s=10)
+                    alpha=0.5, s=11)
     axes[0].set_xlim(xx.min(), xx.max())
     axes[0].set_ylim(yy.min(), yy.max())
     axes[0].set_zlim([bottom, 1.0])
@@ -113,9 +113,9 @@ def draw(idx):
     axes[1].clear()
     axes[1].set_title(r"$epochs: {:02d}/{:02d}$".format(idx, max_epochs), fontsize=8)
     axes[1].contourf(xx, yy, probability, cmap=cm, alpha=.6)
-    axes[1].scatter(train()["x"], train()["y"], c=c_train, cmap=cm_bright, edgecolors='k', s=10)
+    axes[1].scatter(train()["x"], train()["y"], c=c_train, cmap=cm_bright, edgecolors='k', s=16)
     axes[1].scatter(test()["x"], test()["y"], c=c_test, cmap=cm_bright, edgecolors='k', alpha=0.5,
-                    s=10)
+                    s=16)
     axes[1].arrow(0, 0, wh[0, 0] / np.linalg.norm(wh[0]), wh[0, 1] / np.linalg.norm(wh[0]), head_width=0.06,
                   head_length=0.1, fc='#555555', ec='#555555')
     axes[1].arrow(0, 0, wh[1, 0] / np.linalg.norm(wh[1]), wh[1, 1] / np.linalg.norm(wh[1]), head_width=0.06,
@@ -136,10 +136,10 @@ def draw(idx):
     axes[2].set_title(r"$outputs\ of\ hidden\ layer\ &\ seperating \ plane\ of\ last\ layer$", fontsize=8)
     axes[2].scatter(hidden_outputs_train[:, 0], hidden_outputs_train[:, 1], hidden_outputs_train[:, 2],
                     c=c_train,
-                    cmap=cm_bright, edgecolors="k", s=10)
+                    cmap=cm_bright, edgecolors="k", s=11)
     axes[2].scatter(hidden_outputs_test[:, 0], hidden_outputs_test[:, 1], hidden_outputs_test[:, 2],
                     c=c_test,
-                    cmap=cm_bright, edgecolors="k", alpha=0.6, s=10)
+                    cmap=cm_bright, edgecolors="k", alpha=0.6, s=11)
     axes[2].plot_surface(xxx, yyy, zzz, rstride=1, cstride=1, alpha=0.6, cmap=blues, vmin=0.0, vmax=1.0)
     axes[2].set_xlabel(r"$1st\ neuron$", fontsize=8)
     axes[2].set_ylabel(r"$2nd\ neuron$", fontsize=8)
