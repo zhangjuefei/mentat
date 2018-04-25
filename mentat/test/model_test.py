@@ -1,15 +1,17 @@
-import pandas as pd
-import unittest
-import os
-import numpy as np
 import logging
-logging.basicConfig(level = logging.INFO,format = "%(message)s"  )
+import unittest
+
+import numpy as np
+import os
+import pandas as pd
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 from mentat import ZDataFrame
 from mentat.evaluator import ClassificationEvaluator, RegressionEvaluator
 from mentat.model import DNN, LogisticRegression, LinearRegression
 from mentat.pipeline import Pipeline
-from mentat.preprocessor import StandardScaler, RobustScaler
+from mentat.preprocessor import StandardScaler, RobustScaler, Dummy
 from mentat.trainer import MultiModelTrainer, TrivialTrainer, GridSearchTrainer
 
 DATA_PATH = "../data"
@@ -34,6 +36,13 @@ class ModelTest(unittest.TestCase):
                 "binary"
             ).impute("mean")
 
+            self.ghost = ZDataFrame(
+                pd.read_csv(DATA_PATH + os.path.sep + "train.csv"),
+                "type",
+                ["id"],
+                "multiclass"
+            ).impute("mean")
+
             x = np.arange(-2 * np.pi, 2 * np.pi, .1)
             true_y = 2. + 3. * x  # np.sin(x)
             y = true_y + np.random.normal(loc=0., scale=.6, size=len(x))
@@ -44,7 +53,7 @@ class ModelTest(unittest.TestCase):
 
             self.initialized = True
 
-    def test_grid_search_trainner(self):
+    def _test_grid_search_trainner(self):
         logging.info("\n\nCASE: TEST GRID-SEARCH TRAINER\n")
         # load and construct the data frame
         data = self.bird
@@ -89,7 +98,7 @@ class ModelTest(unittest.TestCase):
             list(map(lambda t: str(t[0]) + ": " + str(t[1]), list(grid_metrics.items())))))
         self.assertGreater(eva["accuracy"], 0.70, "accuracy is too low")
 
-    def test_multi_trainer(self):
+    def _test_multi_trainer(self):
         logging.info("\n\nCASE: TEST MULTI-MODEL TRAINER\n")
         # load and construct the data frame
         data = self.bird
@@ -144,7 +153,7 @@ class ModelTest(unittest.TestCase):
         logging.info("Precision & Recall:\n" + str(eva["classification_report"]))
         logging.info("Confision Matrix:\n" + str(eva["confusion_matrix"]))
 
-    def test_linear_regression(self):
+    def _test_linear_regression(self):
         logging.info("\n\nCASE: TEST LINEAR REGRESSION\n")
         lr_arr = {
             "sgd_lr": LinearRegression(method="sgd", eta=0.01, decay_power=0.5, regularization=30.0, max_epochs=1000,
@@ -167,7 +176,7 @@ class ModelTest(unittest.TestCase):
         logging.info("Explained Variance: {:.3f}".format(eva["explained_variance"]))
         self.assertLess(eva["mse"], .6, "mse is too high")
 
-    def test_logistic_regression(self):
+    def _test_logistic_regression(self):
         logging.info("\n\nCASE: TEST LOGISTIC REGRESSION\n")
         pipeline = Pipeline(
             {
@@ -181,6 +190,26 @@ class ModelTest(unittest.TestCase):
         eva = pipeline.get_operator("trainer").get_evaluator()
         logging.info("Accuracy: {:.3f}\n".format(eva["accuracy"]))
         logging.info("Classification Report:\n" + str(eva["classification_report"]))
+        self.assertGreater(eva["accuracy"], .6, "accuracy is too low")
+
+    def test_dummy_preprocessor(self):
+        logging.info("\n\nCASE: TEST DUMMY PREPROCESSOR\n")
+
+        dnn = DNN(10, [10, 3], ["relu", "identity"], softmax=True, max_epochs=20)
+        pipeline = Pipeline(
+            {
+                "scaler": RobustScaler(),
+                "dummy": Dummy(),
+                "trainer": TrivialTrainer(dnn, train_fraction=.7, evaluator=ClassificationEvaluator())
+            }
+        )
+
+        pipeline.fit(self.ghost)
+
+        eva = pipeline.get_operator("trainer").get_evaluator()
+        logging.info("Accuracy: {:.3f}\n".format(eva["accuracy"]))
+        logging.info("Classification Report:\n" + str(eva["classification_report"]))
+        logging.info("Confision Matrix:\n" + str(eva["confusion_matrix"]))
         self.assertGreater(eva["accuracy"], .6, "accuracy is too low")
 
 
