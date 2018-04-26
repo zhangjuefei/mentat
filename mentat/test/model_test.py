@@ -58,15 +58,14 @@ class ModelTest(unittest.TestCase):
         # load and construct the data frame
         data = self.bird
 
-        # number of features(input size) and number of categories(output size)
-        input_size = len(data.feature_cols)
+        # number of categories(output size)
         output_size = len(data.category)
 
         # split the data into train(and test) data set and data set to be predicted
         train_and_test, to_be_predicted = data.split(.7)
 
         # construct a model(DNN)
-        dnn = DNN(input_size, [40, output_size], ["tanh", "identity"], softmax=True)
+        dnn = DNN([40, output_size], ["tanh", "identity"], softmax=True)
 
         # construct a pipeline contains a standard scaler and a grid search trainer.
         pipeline = Pipeline(
@@ -103,8 +102,7 @@ class ModelTest(unittest.TestCase):
         # load and construct the data frame
         data = self.bird
 
-        # number of features(input size) and number of categories(output size)
-        input_size = len(data.feature_cols)
+        # number of categories(output size)
         output_size = len(data.category)
 
         # split the data into train(and test) data set and data set to be predicted
@@ -112,11 +110,11 @@ class ModelTest(unittest.TestCase):
 
         # construct 3 models(DNN) with different hyper-parameters(size of hidden layer and max epochs here)
         dnns = {
-            "dnn_1": DNN(input_size, [60, output_size], ["relu", "identity"], softmax=True, max_epochs=60),
-            "dnn_2": DNN(input_size, [60, output_size], ["sigmoid", "identity"], softmax=True, max_epochs=60),
-            "dnn_3": DNN(input_size, [40, 40, 40, output_size], ["sigmoid", "sigmoid", "sigmoid", "identity"],
+            "dnn_1": DNN([60, output_size], ["relu", "identity"], softmax=True, max_epochs=60),
+            "dnn_2": DNN([60, output_size], ["sigmoid", "identity"], softmax=True, max_epochs=60),
+            "dnn_3": DNN([40, 40, 40, output_size], ["sigmoid", "sigmoid", "sigmoid", "identity"],
                          softmax=True, max_epochs=60),
-            "dnn_4": DNN(input_size, [40, 40, 40, output_size], ["tanh", "tanh", "tanh", "identity"], eta=.5,
+            "dnn_4": DNN([40, 40, 40, output_size], ["tanh", "tanh", "tanh", "identity"], eta=.5,
                          softmax=True, max_epochs=60)
         }
 
@@ -195,7 +193,15 @@ class ModelTest(unittest.TestCase):
     def test_dummy_preprocessor(self):
         logging.info("\n\nCASE: TEST DUMMY PREPROCESSOR\n")
 
-        dnn = DNN(10, [10, 3], ["relu", "identity"], softmax=True, max_epochs=20)
+        data = self.ghost
+
+        # number of categories(output size)
+        output_size = len(data.category)
+
+        # split the data into train(and test) data set and data set to be predicted
+        train_and_test, to_be_predicted = data.split(.7)
+
+        dnn = DNN([10, output_size], ["relu", "identity"], softmax=True, max_epochs=20)
         pipeline = Pipeline(
             {
                 "scaler": RobustScaler(),
@@ -204,13 +210,15 @@ class ModelTest(unittest.TestCase):
             }
         )
 
-        pipeline.fit(self.ghost)
+        pipeline.fit(train_and_test)
 
-        eva = pipeline.get_operator("trainer").get_evaluator()
-        logging.info("Accuracy: {:.3f}\n".format(eva["accuracy"]))
-        logging.info("Classification Report:\n" + str(eva["classification_report"]))
+        predict = pipeline.evaluate(to_be_predicted)
+        eva = ClassificationEvaluator().fit(predict)
+
+        logging.info("\nTest Metrics:")
+        logging.info("Accuracy: {:.3f}".format(eva["accuracy"]))
+        logging.info("Precision & Recall:\n" + str(eva["classification_report"]))
         logging.info("Confision Matrix:\n" + str(eva["confusion_matrix"]))
-        self.assertGreater(eva["accuracy"], .6, "accuracy is too low")
 
 
 if __name__ == "__main__":

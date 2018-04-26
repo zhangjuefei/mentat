@@ -22,15 +22,15 @@ class DNN(Model):
         }
     )
 
-    def __init__(self, input_shape, shape, activations, eta=0.5, threshold=1e-5, softmax=False, max_epochs=20,
+    def __init__(self, shape, activations, eta=0.5, threshold=1e-5, softmax=False, max_epochs=20,
                  regularization=0, minibatch_size=20, momentum=0.9, decay_power=0.2, verbose=False):
         Model.__init__(self)
 
         if not len(shape) == len(activations):
             raise ParameterException("activations must equal to number od layers.")
 
-        self.pv("input_shape", input_shape)
-        self.depth = len(self.pv("shape", shape))
+        self.shape = self.pv("shape", shape)
+        self.depth = len(self.shape)
         self.activity_levels = [np.mat([0])] * self.depth
         self.outputs = [np.mat(np.mat([0]))] * (self.depth + 1)
         self.deltas = [np.mat(np.mat([0]))] * self.depth
@@ -75,8 +75,7 @@ class DNN(Model):
         self.acc_weights_delta = [np.mat(np.mat([0]))] * self.depth
         self.acc_biases_delta = [np.mat(np.mat([0]))] * self.depth
 
-        self.weights[0] = np.mat(np.random.random((shape[0], input_shape)) / 200)
-        self.biases[0] = np.mat(np.random.random((shape[0], 1)) / 200)
+        self.input_weights_initialized = False
         for idx in np.arange(1, len(shape)):
             self.weights[idx] = np.mat(np.random.random((shape[idx], shape[idx - 1])) / 200)
             self.biases[idx] = np.mat(np.random.random((shape[idx], 1)) / 200)
@@ -137,6 +136,11 @@ class DNN(Model):
         self.epochs = 0
         start = 0
         train_set_size = x.shape[0]
+
+        if not self.input_weights_initialized:
+            self.weights[0] = np.mat(np.random.random((self.shape[0], x.shape[1])) / 200)
+            self.biases[0] = np.mat(np.random.random((self.shape[0], 1)) / 200)
+            self.input_weights_initialized = True
 
         while True:
 
