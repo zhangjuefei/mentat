@@ -53,7 +53,7 @@ class ModelTest(unittest.TestCase):
 
             self.initialized = True
 
-    def _test_grid_search_trainner(self):
+    def test_grid_search_trainner(self):
         logging.info("\n\nCASE: TEST GRID-SEARCH TRAINER\n")
         # load and construct the data frame
         data = self.bird
@@ -98,7 +98,7 @@ class ModelTest(unittest.TestCase):
             list(map(lambda t: str(t[0]) + ": " + str(t[1]), list(grid_metrics.items())))))
         self.assertGreater(eva["accuracy"], 0.70, "accuracy is too low")
 
-    def _test_multi_trainer(self):
+    def test_multi_trainer(self):
         logging.info("\n\nCASE: TEST MULTI-MODEL TRAINER\n")
         # load and construct the data frame
         data = self.bird
@@ -153,7 +153,7 @@ class ModelTest(unittest.TestCase):
         logging.info("Precision & Recall:\n" + str(eva["classification_report"]))
         logging.info("Confision Matrix:\n" + str(eva["confusion_matrix"]))
 
-    def _test_linear_regression(self):
+    def test_linear_regression(self):
         logging.info("\n\nCASE: TEST LINEAR REGRESSION\n")
         lr_arr = {
             "sgd_lr": LinearRegression(method="sgd", eta=0.01, decay_power=0.5, regularization=30.0, max_epochs=1000,
@@ -176,7 +176,7 @@ class ModelTest(unittest.TestCase):
         logging.info("Explained Variance: {:.3f}".format(eva["explained_variance"]))
         self.assertLess(eva["mse"], .6, "mse is too high")
 
-    def _test_logistic_regression(self):
+    def test_logistic_regression(self):
         logging.info("\n\nCASE: TEST LOGISTIC REGRESSION\n")
         pipeline = Pipeline(
             {

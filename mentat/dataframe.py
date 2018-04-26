@@ -56,8 +56,7 @@ class ZDataFrame:
             raise UnSupportException("data set has no response.")
 
         if self.response_encode:
-            response_category = np.array(
-                [int(np.where(self.category == v)[0][0]) for v in self.data[self.response_column]])
+            response_category = np.array(self.data[self.response_column].apply(lambda v: list(self.category).index(v)))
 
             if self.response_encode == "binary":
                 return response_category.reshape(-1, 1)
