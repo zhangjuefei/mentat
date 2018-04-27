@@ -75,7 +75,7 @@ predict = pipeline.evaluate(to_be_predicted)
 print(predict().head(5))
 ```
 
-#####output
+####output
 
 ```
 model: dnn_1  accuracy: 0.967742
