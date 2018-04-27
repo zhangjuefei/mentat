@@ -8,8 +8,8 @@ from mentat.preprocessor import StandardScaler
 from mentat.trainer import MultiModelTrainer
 
 # load and construct the data frame
-df = pd.read_csv("../data/bird.csv")
-data = ZDataFrame(df, response_column="type", ignores=["id"], response_encode="multiclass").impute("mean")
+df = pd.read_csv("../data/Iris.csv")
+data = ZDataFrame(df, response_column="Species", ignores=["Id"], response_encode="multiclass").impute("mean")
 
 # number of categories(output size)
 output_size = len(data.category)
