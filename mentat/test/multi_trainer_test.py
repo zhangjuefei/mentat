@@ -37,22 +37,22 @@ pipeline = Pipeline(
 pipeline.fit(train_and_test)
 
 # the accuracies of 3 DNN
-print("Accuracies of 3 models:")
+print("\nAccuracies of 3 Models:\n")
 for name, accuracy in pipeline.get_operator("trainer").metrics.items():
     print("model: {:s}  accuracy: {:.6f}".format(name, accuracy))
 
 # metrics of the chosen(best) DNN
 eva = pipeline.get_operator("trainer").get_evaluator()
-print("\nconfusion matrix of the best model:")
+print("\nConfusion Matrix of the Best Model:\n")
 print(eva["confusion_matrix"])
-print("\nclassification report of the best model:")
+print("\nClassification Report of the Best Model:\n")
 print(eva["classification_report"])
-print("\naccuracy of the best model")
+print("\nAccuracy of the Best Model:\n")
 print(eva["accuracy"])
 
 #  use pipeline to predict
 predict = pipeline.evaluate(to_be_predicted)
 
 # ZDataFrame is callable, return the data(pandas DataFrame) it contains
-print("\nsome prediction examples:")
+print("\nSome Prediction Examples:\n")
 print(predict().head(5))

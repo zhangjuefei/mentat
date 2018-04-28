@@ -59,68 +59,69 @@ pipeline = Pipeline(
 pipeline.fit(train_and_test)
 
 # the accuracies of 3 DNN
-print("Accuracies of 3 models:")
+print("\nAccuracies of 3 Models:\n")
 for name, accuracy in pipeline.get_operator("trainer").metrics.items():
     print("model: {:s}  accuracy: {:.6f}".format(name, accuracy))
 
 # metrics of the chosen(best) DNN
 eva = pipeline.get_operator("trainer").get_evaluator()
-print("\nconfusion matrix of the best model:")
+print("\nConfusion Matrix of the Best Model:\n")
 print(eva["confusion_matrix"])
-print("\nclassification report of the best model:")
+print("\nClassification Report of the Best Model:\n")
 print(eva["classification_report"])
-print("\naccuracy of the best model")
+print("\nAccuracy of the Best Model:\n")
 print(eva["accuracy"])
 
 #  use pipeline to predict
 predict = pipeline.evaluate(to_be_predicted)
 
 # ZDataFrame is callable, return the data(pandas DataFrame) it contains
-print("\nsome prediction examples:")
+print("\nSome Prediction Examples:\n")
 print(predict().head(5))
 ```
 
 ##### output
 
 ```
-C:\Users\chaos\AppData\Local\Programs\Python\Python36-32\python.exe D:/projects/mentat/mentat/test/multi_trainer_test.py
-Accuracies of 3 models:
-model: dnn_1  accuracy: 1.000000
-model: dnn_2  accuracy: 0.967742
-model: dnn_3  accuracy: 1.000000
+Accuracies of 3 Models:
 
-confusion matrix of the best model:
+model: dnn_1  accuracy: 0.935484
+model: dnn_2  accuracy: 0.903226
+model: dnn_3  accuracy: 0.870968
+
+Confusion Matrix of the Best Model:
+
 predict          Iris-setosa  Iris-versicolor  Iris-virginica  total
-true
-Iris-setosa               13                0               0     13
-Iris-versicolor            0               11               0     11
-Iris-virginica             0                0               7      7
-total                     13               11               7     31
+true                                                                
+Iris-setosa               12                0               0     12
+Iris-versicolor            0               12               0     12
+Iris-virginica             0                2               5      7
+total                     12               14               5     31
 
-classification report of the best model:
-                 precision  recall  f1 score
-Iris-setosa            1.0     1.0       1.0
-Iris-versicolor        1.0     1.0       1.0
-Iris-virginica         1.0     1.0       1.0
+Classification Report of the Best Model:
 
-accuracy of the best model
-1.0
+                 precision    recall  f1 score
+Iris-setosa       1.000000  1.000000  1.000000
+Iris-versicolor   0.857143  1.000000  0.795918
+Iris-virginica    1.000000  0.714286  0.612245
 
-some prediction examples:
+Accuracy of the Best Model:
+
+0.9354838709677419
+
+Some Prediction Examples:
+
   predict_category   Iris-setosa  Iris-versicolor  Iris-virginica   Id  \
-0   Iris-virginica  5.132001e-16         0.011557        0.988443  132
-1   Iris-virginica  5.143205e-28         0.000007        0.999993  106
-2   Iris-virginica  2.132122e-19         0.002446        0.997554  143
-3  Iris-versicolor  1.524778e-03         0.997197        0.001278   97
-4   Iris-virginica  7.390647e-25         0.000054        0.999946  129
+0      Iris-setosa  9.917974e-01         0.008183        0.000020   13   
+1      Iris-setosa  9.917974e-01         0.008183        0.000020   26   
+2  Iris-versicolor  1.116974e-07         0.517066        0.482934  128   
+3      Iris-setosa  9.917974e-01         0.008183        0.000020   29   
+4   Iris-virginica  6.104579e-13         0.000141        0.999859  130   
 
-   SepalLengthCm  SepalWidthCm  PetalLengthCm  PetalWidthCm          Species
-0       2.569442      1.652052       1.552178      1.103227   Iris-virginica
-1       2.199527     -0.205677       1.664075      1.232367   Iris-virginica
-2      -0.019964     -0.902326       0.824844      0.974086   Iris-virginica
-3      -0.143269     -0.437893       0.321306      0.199245  Iris-versicolor
-4       0.719866     -0.670109       1.104588      1.232367   Iris-virginica
-
-Process finished with exit code 0
-
+   SepalLengthCm  SepalWidthCm  PetalLengthCm  PetalWidthCm         Species  
+0      -1.264247     -0.125569      -1.317562     -1.428032     Iris-setosa  
+1      -1.025065     -0.125569      -1.204904     -1.296618     Iris-setosa  
+2       0.290435     -0.125569       0.653953      0.806006  Iris-virginica  
+3      -0.785883      0.816201      -1.317562     -1.296618     Iris-setosa  
+4       1.605935     -0.125569       1.160914      0.543178  Iris-virginica
 ```
