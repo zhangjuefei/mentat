@@ -67,13 +67,7 @@ def draw(idx):
     wh = dnn.weights[0]  # hidden layer weights matrix
     w = (dnn.weights[dnn.depth - 1][0, :] - dnn.weights[dnn.depth - 1][1, :]).A1
     b = (dnn.biases[dnn.depth - 1][0, :] - dnn.biases[dnn.depth - 1][1, :])[0][0]
-    xxx_min = min(np.min(hidden_outputs_train[:, 0]), np.min(hidden_outputs_test[:, 0]))
-    xxx_max = max(np.max(hidden_outputs_train[:, 0]), np.max(hidden_outputs_test[:, 0]))
-    yyy_min = min(np.min(hidden_outputs_train[:, 1]), np.min(hidden_outputs_test[:, 1]))
-    yyy_max = max(np.max(hidden_outputs_train[:, 1]), np.max(hidden_outputs_test[:, 1]))
-    xxx_range = (xxx_max - xxx_min) / 100
-    yyy_range = (yyy_max - yyy_min) / 100
-    xxx, yyy = np.meshgrid(np.arange(xxx_min, xxx_max, xxx_range), np.arange(yyy_min, yyy_max, yyy_range))
+    xxx, yyy = np.meshgrid(np.arange(0.0, 1.0, 0.01), np.arange(0.0, 1.0, 0.01))
     zzz = (-w[0] / w[2] * xxx - w[1] / w[2] * yyy - b / w[2]).A
     need = (zzz >= 0) & (zzz <= 1)
     xxx = xxx[need].ravel()
@@ -145,7 +139,7 @@ def draw(idx):
                     c=c_test,
                     cmap=cm_bright, edgecolors="k", alpha=0.6, s=11)
     if len(zzz) >= 3:
-        axes[2].plot_trisurf(xxx.ravel(), yyy.ravel(), zzz.ravel(), antialiased=True, alpha=0.4, cmap=greens)
+        axes[2].plot_trisurf(xxx.ravel(), yyy.ravel(), zzz.ravel(), antialiased=True, alpha=0.2, color="y")
 
     axes[2].set_xlabel(r"$1st\ neuron$", fontsize=8)
     axes[2].set_ylabel(r"$2nd\ neuron$", fontsize=8)
