@@ -139,7 +139,7 @@ def draw(idx):
                     c=c_test,
                     cmap=cm_bright, edgecolors="k", alpha=0.6, s=11)
     if len(zzz) >= 3:
-        axes[2].plot_trisurf(xxx.ravel(), yyy.ravel(), zzz.ravel(), antialiased=True, alpha=0.2, color="y")
+        axes[2].plot_trisurf(xxx.ravel(), yyy.ravel(), zzz.ravel(), antialiased=True, alpha=0.5, color="g")
 
     axes[2].set_xlabel(r"$1st\ neuron$", fontsize=8)
     axes[2].set_ylabel(r"$2nd\ neuron$", fontsize=8)
