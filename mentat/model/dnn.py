@@ -112,7 +112,7 @@ class DNN(Model):
             # current gradient
             weights_grad = -self.deltas[idx].T * self.outputs[idx].T / self.deltas[idx].shape[0] + \
                            self.regularization * self.weights[idx]
-            biases_grad = -np.mean(self.deltas[idx].T, axis=1) + self.regularization * self.biases[idx]
+            biases_grad = -np.mean(self.deltas[idx].T, axis=1) #  + self.regularization * self.biases[idx]
 
             # accumulated delta
             self.acc_weights_delta[idx] = self.acc_weights_delta[
@@ -156,7 +156,7 @@ class DNN(Model):
             self.update()
 
             if self.is_softmax:
-                loss.append(np.mean(-np.sum(np.multiply(minibatch_y, np.log(yp + 1e-1000)), axis=0)))
+                loss.append(np.mean(-np.sum(np.multiply(minibatch_y, np.log(yp + 1e-300)), axis=0)))
             else:
                 loss.append(np.mean(np.sqrt(np.sum(np.power(d, 2), axis=0))))
 

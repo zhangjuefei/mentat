@@ -8,8 +8,8 @@ from mentat.preprocessor import StandardScaler
 from mentat.trainer import MultiModelTrainer
 
 # load and construct the data frame
-df = pd.read_csv("../data/Iris.csv")
-data = ZDataFrame(df, response_column="Species", ignores=["Id"], response_encode="multiclass").impute("mean")
+df = pd.read_csv("../data/bird.csv")
+data = ZDataFrame(df, response_column="type", ignores=["id"], response_encode="multiclass").impute("mean")
 
 # number of categories(output size)
 output_size = len(data.category)
@@ -20,8 +20,8 @@ train_and_test, to_be_predicted = data.split(.7)
 # construct 3 models(DNN) with different hyper-parameters(size of hidden layer and max epochs here)
 dnns = {
     "dnn_1": DNN([2, output_size], ["relu", "identity"], softmax=True, max_epochs=2),
-    "dnn_2": DNN([20, output_size], ["relu", "identity"], softmax=True, max_epochs=20),
-    "dnn_3": DNN([60, output_size], ["relu", "identity"], softmax=True, max_epochs=30)
+    "dnn_2": DNN([20, output_size], ["relu", "identity"], softmax=True, max_epochs=5),
+    "dnn_3": DNN([60, output_size], ["relu", "identity"], softmax=True, max_epochs=20)
 }
 
 # construct a pipeline contains a standard scaler and a multi-model trainer(train 3 DNN parallel)
